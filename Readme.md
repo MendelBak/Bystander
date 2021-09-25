@@ -1,6 +1,8 @@
 # React Native application for Bystander Android application.
 
-navigate inside the `/Bystander` directory and open two terminal windows.
+I am transferring all my code from my old directory `SendForHelp_ReactNative` since I want a fresh start with UIKitten. Plus, I want to use their template, since I have more confidence in their choices, versus mine. Also, I am concerned that some hidden values may be present, when I uploaded it to the Google Play Store, so I want to start from scratch before uploading the new version with the new name (Bystander, instead of `Send For Help`). I am now transferring all my old screens, services, models, stores, and configurations from my old directory to this one, which will be the primary.
+
+Navigate inside the `/Bystander` directory and open two terminal windows.
 `npm install` (for new installations)
 `npx react-native start`
 `npx react-native run-android`
