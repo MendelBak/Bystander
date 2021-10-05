@@ -1,17 +1,9 @@
-import { Layout } from '@ui-kitten/components';
+import { Button, Card, Layout } from '@ui-kitten/components';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Vibration,
-  Text,
-  View,
-  SafeAreaView,
-} from 'react-native';
-
+import { StyleSheet, Vibration, Text, View, SafeAreaView } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SYMPTOMS } from '../common/enums';
-
 import rootStore from '../stores/root.store';
 
 const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
@@ -22,64 +14,73 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={styles.container}>
         <View style={styles.card__container}>
-          <Pressable
+          <Card
+            status={getSymptoms.choking ? 'success' : 'basic'}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.CHOKING)
             )}
-            style={getSymptoms.choking ? styles.selected_card : styles.card}>
-            <Text>CHOKING</Text>
-          </Pressable>
-
-          <Pressable
+            style={styles.card}>
+            <Text>Choking</Text>
+          </Card>
+          <Card
+            status={getSymptoms.drowning ? 'success' : 'basic'}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.DROWNING)
             )}
-            style={getSymptoms.drowning ? styles.selected_card : styles.card}>
-            <Text>DROWING</Text>
-          </Pressable>
-
-          <Pressable
+            style={styles.card}>
+            <Text>Drowning</Text>
+            <Icon size={50} name="swim" />
+          </Card>
+          <Card
+            style={styles.card}
+            status={getSymptoms.hemmoraging ? 'success' : 'basic'}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.HEMMORAGING)
-            )}
-            style={
-              getSymptoms.hemmoraging ? styles.selected_card : styles.card
-            }>
-            <Text>BLEEDING</Text>
-          </Pressable>
-
-          <Pressable
+            )}>
+            <Text>Hemmoraging</Text>
+          </Card>
+          <Card
+            style={styles.card}
+            status={getSymptoms.bluntTrauma ? 'success' : 'basic'}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.BLUNT_TRAUMA)
-            )}
-            style={
-              getSymptoms.bluntTrauma ? styles.selected_card : styles.card
-            }>
-            <Text>HIT BY HEAVY OBJECT</Text>
-          </Pressable>
-
-          <Pressable
+            )}>
+            <Text>Blunt Trauma</Text>
+          </Card>
+          <Card
+            style={styles.card}
+            status={getSymptoms.cardiacArrest ? 'success' : 'basic'}
+            onPress={() => (
+              Vibration.vibrate(50),
+              emergencyStore.updateSymptom(SYMPTOMS.CARDIAC_ARREST)
+            )}>
+            <Text>Cardiac Arrest</Text>
+          </Card>
+          <Card
+            style={styles.card}
+            status={getSymptoms.other ? 'success' : 'basic'}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.OTHER)
-            )}
-            style={getSymptoms.other ? styles.selected_card : styles.card}>
-            <Text>OTHER</Text>
-          </Pressable>
-
-          <Pressable
+            )}>
+            <Text>Other</Text>
+          </Card>
+        </View>
+        <View style={styles.next_button_container}>
+          <Button
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptoms(),
-              navigation.navigate('First Responder')
+              navigation.navigate('Hero')
             )}
-            style={styles.card}>
-            <Text>CONTINUE</Text>
-          </Pressable>
+            status="success"
+            accessoryRight={<Icon size={20} name="check-underline" />}>
+            Update
+          </Button>
         </View>
       </Layout>
     </SafeAreaView>
@@ -96,33 +97,40 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   card__container: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-    // alignContent: 'space-between',
-    display: 'flex',
+    backgroundColor: '#F3F3F0',
+    justifyContent: 'center',
+    alignContent: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: '100%',
-    height: '100%',
+    height: '90%',
+  },
+  next_button_container: {
+    justifyContent: 'center',
+    marginLeft: 30,
+    marginRight: 30,
+    height: '10%',
   },
   card: {
-    backgroundColor: 'grey',
+    margin: 10,
+    // backgroundColor: 'grey',
     height: '20%',
-    width: '50%',
+    width: '40%',
+    borderRadius: 15,
+    display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'red',
-    marginBottom: 100,
+    // justifyContent: 'flex-start',
+    // borderWidth: 2,
+    // borderColor: 'red',
+    // marginBottom: 100,
   },
   selected_card: {
-    backgroundColor: 'green',
+    // margin: 2,
     height: '20%',
-    width: '50%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'red',
-    marginBottom: 100,
+    width: '40%',
+    borderColor: 'green',
+
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
 });
