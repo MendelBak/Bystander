@@ -1,73 +1,88 @@
-import {observer} from 'mobx-react-lite';
+import { Layout } from '@ui-kitten/components';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import {Pressable, StyleSheet, Vibration, Text, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Vibration,
+  Text,
+  View,
+  SafeAreaView,
+} from 'react-native';
 
-import {SYMPTOMS} from '../common/enums';
+import { SYMPTOMS } from '../common/enums';
 
 import rootStore from '../stores/root.store';
 
-const SymptomsScreen = observer(({navigation}: {navigation: any}) => {
-  const {emergencyStore} = rootStore;
-  const {getSymptoms} = emergencyStore;
+const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
+  const { emergencyStore } = rootStore;
+  const { getSymptoms } = emergencyStore;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card__container}>
-        <Pressable
-          onPress={() => (
-            Vibration.vibrate(50),
-            emergencyStore.updateSymptom(SYMPTOMS.CHOKING)
-          )}
-          style={getSymptoms.choking ? styles.selected_card : styles.card}>
-          <Text>CHOKING</Text>
-        </Pressable>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Layout style={styles.container}>
+        <View style={styles.card__container}>
+          <Pressable
+            onPress={() => (
+              Vibration.vibrate(50),
+              emergencyStore.updateSymptom(SYMPTOMS.CHOKING)
+            )}
+            style={getSymptoms.choking ? styles.selected_card : styles.card}>
+            <Text>CHOKING</Text>
+          </Pressable>
 
-        <Pressable
-          onPress={() => (
-            Vibration.vibrate(50),
-            emergencyStore.updateSymptom(SYMPTOMS.DROWNING)
-          )}
-          style={getSymptoms.drowning ? styles.selected_card : styles.card}>
-          <Text>DROWING</Text>
-        </Pressable>
+          <Pressable
+            onPress={() => (
+              Vibration.vibrate(50),
+              emergencyStore.updateSymptom(SYMPTOMS.DROWNING)
+            )}
+            style={getSymptoms.drowning ? styles.selected_card : styles.card}>
+            <Text>DROWING</Text>
+          </Pressable>
 
-        <Pressable
-          onPress={() => (
-            Vibration.vibrate(50),
-            emergencyStore.updateSymptom(SYMPTOMS.HEMMORAGING)
-          )}
-          style={getSymptoms.hemmoraging ? styles.selected_card : styles.card}>
-          <Text>BLEEDING</Text>
-        </Pressable>
+          <Pressable
+            onPress={() => (
+              Vibration.vibrate(50),
+              emergencyStore.updateSymptom(SYMPTOMS.HEMMORAGING)
+            )}
+            style={
+              getSymptoms.hemmoraging ? styles.selected_card : styles.card
+            }>
+            <Text>BLEEDING</Text>
+          </Pressable>
 
-        <Pressable
-          onPress={() => (
-            Vibration.vibrate(50),
-            emergencyStore.updateSymptom(SYMPTOMS.BLUNT_TRAUMA)
-          )}
-          style={getSymptoms.bluntTrauma ? styles.selected_card : styles.card}>
-          <Text>HIT BY HEAVY OBJECT</Text>
-        </Pressable>
+          <Pressable
+            onPress={() => (
+              Vibration.vibrate(50),
+              emergencyStore.updateSymptom(SYMPTOMS.BLUNT_TRAUMA)
+            )}
+            style={
+              getSymptoms.bluntTrauma ? styles.selected_card : styles.card
+            }>
+            <Text>HIT BY HEAVY OBJECT</Text>
+          </Pressable>
 
-        <Pressable
-          onPress={() => (
-            Vibration.vibrate(50), emergencyStore.updateSymptom(SYMPTOMS.OTHER)
-          )}
-          style={getSymptoms.other ? styles.selected_card : styles.card}>
-          <Text>OTHER</Text>
-        </Pressable>
+          <Pressable
+            onPress={() => (
+              Vibration.vibrate(50),
+              emergencyStore.updateSymptom(SYMPTOMS.OTHER)
+            )}
+            style={getSymptoms.other ? styles.selected_card : styles.card}>
+            <Text>OTHER</Text>
+          </Pressable>
 
-        <Pressable
-          onPress={() => (
-            Vibration.vibrate(50),
-            emergencyStore.updateSymptoms(),
-            navigation.navigate('First Responder')
-          )}
-          style={styles.card}>
-          <Text>CONTINUE</Text>
-        </Pressable>
-      </View>
-    </View>
+          <Pressable
+            onPress={() => (
+              Vibration.vibrate(50),
+              emergencyStore.updateSymptoms(),
+              navigation.navigate('First Responder')
+            )}
+            style={styles.card}>
+            <Text>CONTINUE</Text>
+          </Pressable>
+        </View>
+      </Layout>
+    </SafeAreaView>
   );
 });
 

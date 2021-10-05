@@ -19,6 +19,7 @@
 // };
 
 // External
+import { Layout } from '@ui-kitten/components';
 import {observer} from 'mobx-react-lite';
 import React, {useRef} from 'react';
 import {
@@ -29,13 +30,14 @@ import {
   StyleSheet,
   Animated,
   Easing,
+  SafeAreaView,
 } from 'react-native';
-
 import rootStore from '../stores/root.store';
 
+
 const HomeScreen = observer(
-  ({route, navigation}: {route: any; navigation: any}) => {
-    const {emergencyStore} = rootStore;
+  ({route, navigation}: {route: any; navigation: any}, props) => {
+    const { emergencyStore } = rootStore;
 
     const animationValue = useRef(new Animated.Value(0)).current;
     const scaleValue = useRef(0);
@@ -81,8 +83,10 @@ const HomeScreen = observer(
       });
     };
 
-    return (
-      <View style={styles.container}>
+    return (      
+      <SafeAreaView style={{flex: 1}}>
+      {/* <SafeAreaView style={styles.container}> */}
+        <Layout style={styles.container}>
         <Animated.View
           style={{
             height: 200,
@@ -139,32 +143,33 @@ const HomeScreen = observer(
             // }),
             Vibration.vibrate(200);
           }}
-          style={styles.alertButton}>
+            style={styles.alertButton}>
+            
           <View style={styles.alertButton}>
             <Text style={styles.alertButton__text}>
               {emergencyStore.getIsEmergency ? 'CANCEL' : 'GET HELP'}
             </Text>
           </View>
-        </Pressable>
-      </View>
+          </Pressable>
+          </Layout>
+      </SafeAreaView>
     );
   },
 );
 
 export default HomeScreen;
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'grey',
+    width: '100%',
     backgroundColor: '#F0F0F3',
   },
   alertButton: {
     backgroundColor: '#F0F0F3',
-    borderColor: 'rgba(0,0,0,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
     width: 200,

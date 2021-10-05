@@ -7,10 +7,12 @@ import {
   Text,
   View,
   Button,
+  SafeAreaView,
 } from 'react-native';
 import {observer} from 'mobx-react-lite';
 
 import rootStore from '../stores/root.store';
+import { Layout } from '@ui-kitten/components';
 
 const HeroScreen = observer(() => {
   const {emergencyStore} = rootStore;
@@ -23,7 +25,8 @@ const HeroScreen = observer(() => {
   } = emergencyStore;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Layout style={styles.container}>
       <View style={styles.emergencyStatus}>
         <Text>{getIsEmergency ? 'EMERGENCY IN PROGRESS' : 'NO EMERGENCY'}</Text>
         <Text>
@@ -98,8 +101,9 @@ const HeroScreen = observer(() => {
             )}
           />
         </View>
-      ) : null}
-    </View>
+        ) : null}
+        </Layout>
+    </SafeAreaView>
   );
 });
 
@@ -110,9 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'grey',
-    backgroundColor: 'white',
+    backgroundColor: '#F0F0F3',
   },
   welcome: {
     fontSize: 20,

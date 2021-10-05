@@ -1,12 +1,14 @@
+import { Layout } from '@ui-kitten/components';
 import {observer} from 'mobx-react-lite';
 import * as React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 
 import {TextInput} from 'react-native-gesture-handler';
 
 const LocationDetailsScreen = observer(({navigation}: {navigation: any}) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
+    <Layout style={styles.container}>
       <View style={styles.card__container}>
         <Text style={{color: 'black'}}>FLOOR NUMBER</Text>
         <TextInput
@@ -53,7 +55,8 @@ const LocationDetailsScreen = observer(({navigation}: {navigation: any}) => {
           <Text>CONTINUE</Text>
         </Button>
       </View>
-    </View>
+      </Layout >
+    </SafeAreaView>
   );
 });
 
