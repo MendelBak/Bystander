@@ -1,4 +1,4 @@
-import {makeAutoObservable} from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 export default class UserModel {
   _id?: string;
@@ -8,6 +8,7 @@ export default class UserModel {
   preferredName?: string;
   age!: number;
   email!: string;
+  symptom;
   googleId!: string;
   isHero: boolean = false;
 

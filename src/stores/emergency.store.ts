@@ -1,7 +1,7 @@
 // External
-import {makeAutoObservable} from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import Geolocation from 'react-native-geolocation-service';
-import {Alert, PermissionsAndroid, Platform} from 'react-native';
+import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import axios from 'axios';
 import * as RootNavigation from '../../RootNavigation';
 
@@ -9,8 +9,8 @@ import * as RootNavigation from '../../RootNavigation';
 import EmergencyLocationModel from '../models/emergencyLocation.model';
 import SymptomModel from '../models/symptom.model';
 import EmergencyModel from '../models/emergency.model';
-import {SYMPTOMS} from '../common/enums';
-import {URI} from '../../URI';
+import { SYMPTOMS } from '../common/enums';
+import { URI } from '../../URI';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();
@@ -31,8 +31,8 @@ export default class EmergencyStore {
     //   declareEmergency(position: GeolocationPosition): void {
     this.emergency = new EmergencyModel({
       active: true,
-      responderOnScene: false,
-      firstResponders: [],
+      heroOnScene: false,
+      heroes: [],
       emergencyLocation: new EmergencyLocationModel(position),
       symptom: new SymptomModel(),
       // TODO: Replace with real user ID.
@@ -59,7 +59,7 @@ export default class EmergencyStore {
     this.nearestIntersection = undefined;
 
     axios
-      .put(`${URI}/emergency/endEmergency`, {id: this.emergency._id})
+      .put(`${URI}/emergency/endEmergency`, { id: this.emergency._id })
       .catch(error => {
         console.error('Error while ending an emergency event.', error);
       });
@@ -81,19 +81,17 @@ export default class EmergencyStore {
     // return emergencies;
   }
 
-  get getFirstResponders(): string[] {
-    return this.emergency.firstResponders;
+  get getHeroes(): string[] {
+    return this.emergency.heroes;
   }
 
-  addFirstResponder(id: string): void {
-    this.emergency.firstResponders.push(id);
+  addHero(id: string): void {
+    this.emergency.heroes.push(id);
   }
 
-  removeFirstResponder(id: string): void {
-    this.emergency.firstResponders.splice(
-      this.emergency.firstResponders.findIndex(
-        responderId => responderId === id,
-      ),
+  removeHero(id: string): void {
+    this.emergency.heroes.splice(
+      this.emergency.heroes.findIndex(heroId => heroId === id),
       1,
     );
     // TODO: Need to update the emergency with the newly modified rescuers (after rescuers collection/model is built on the backend).
@@ -115,7 +113,7 @@ export default class EmergencyStore {
       },
       async () => {
         Alert.alert(`GPS Error`, `You must allow GPS tracking`);
-        RootNavigation.navigate('Home', {resetEmergencyAnimation: true});
+        RootNavigation.navigate('Home', { resetEmergencyAnimation: true });
       },
       {
         accuracy: {

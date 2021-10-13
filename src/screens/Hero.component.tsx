@@ -20,7 +20,7 @@ const HeroScreen = observer(() => {
     getEmergencyLocation,
     getIsEmergency,
     getSymptoms,
-    getFirstResponders,
+    getHeroes,
     nearestIntersection,
   } = emergencyStore;
 
@@ -31,9 +31,7 @@ const HeroScreen = observer(() => {
           <Text>
             {getIsEmergency ? 'EMERGENCY IN PROGRESS' : 'NO EMERGENCY'}
           </Text>
-          <Text>
-            {getFirstResponders ? `FIRST RESPONDER: ${getFirstResponders}` : ''}
-          </Text>
+          <Text>{getHeroes ? `: ${getHeroes}` : ''}</Text>
         </View>
 
         {getIsEmergency ? (
@@ -60,10 +58,10 @@ const HeroScreen = observer(() => {
                 !getEmergencyLocation.latitude ||
                 !getEmergencyLocation.longitude ||
                 // TODO: Replace this with the ID of the current user instead of this fake userID.
-                getFirstResponders.includes('Mendel')
+                getHeroes.includes('Mendel')
               }
               onPress={() => (
-                emergencyStore.addFirstResponder('123'),
+                emergencyStore.addHero('123'),
                 Vibration.vibrate(200),
                 Linking.openURL(
                   `https://www.google.com/maps/search/?api=1&query=${getEmergencyLocation.latitude}+${getEmergencyLocation.longitude}`,
@@ -93,14 +91,13 @@ const HeroScreen = observer(() => {
           </>
         ) : null}
 
-        {getIsEmergency && getFirstResponders.length > 0 ? (
+        {getIsEmergency && getHeroes.length > 0 ? (
           <View style={{ marginTop: 15 }}>
             <Button
               title="I Can't Help Anymore"
               // TODO: Need to replace this fake ID with real ID.
               onPress={() => (
-                emergencyStore.removeFirstResponder('123'),
-                Vibration.vibrate(50)
+                emergencyStore.removeHero('123'), Vibration.vibrate(50)
               )}
             />
           </View>

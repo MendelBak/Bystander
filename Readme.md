@@ -15,7 +15,7 @@ Navigate inside the `/Bystander` directory and open two terminal windows.
 
 ## Coming Features
 
-- Track FirstResponders location and update in real time (watch position). Indicate distance and time to arrival of responder to requester.
+- Track Hero location and update in real time (watch position). Indicate distance and time to arrival of responder to requester.
 - Save favorite locations (Home/Work) with information (door code, floor, special instructions, etc).
 - Save emergency contacts and call/email/text if emergency is underway. (How to know this user has emergency?)
 - Display address of emergency (reverse geocoding based on lat/long. Use Google's Geocoding API )

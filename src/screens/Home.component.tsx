@@ -20,8 +20,8 @@
 
 // External
 import { Layout } from '@ui-kitten/components';
-import {observer} from 'mobx-react-lite';
-import React, {useRef} from 'react';
+import { observer } from 'mobx-react-lite';
+import React, { useRef } from 'react';
 import {
   Text,
   View,
@@ -34,16 +34,15 @@ import {
 } from 'react-native';
 import rootStore from '../stores/root.store';
 
-
 const HomeScreen = observer(
-  ({route, navigation}: {route: any; navigation: any}, props) => {
+  ({ route, navigation }: { route: any; navigation: any }, props) => {
     const { emergencyStore } = rootStore;
 
     const animationValue = useRef(new Animated.Value(0)).current;
     const scaleValue = useRef(0);
 
     if (route?.params) {
-      const {resetEmergencyAnimation = false} = route.params;
+      const { resetEmergencyAnimation = false } = route.params;
       if (resetEmergencyAnimation === true) animationValue.setValue(0);
     }
 
@@ -59,7 +58,7 @@ const HomeScreen = observer(
         duration: 3000,
 
         useNativeDriver: true,
-      }).start(({finished}) => {
+      }).start(({ finished }) => {
         emergencyStore.initializeEmergency();
       });
     };
@@ -76,89 +75,87 @@ const HomeScreen = observer(
         // easing: Easing.in(Easing.elastic(1)),
         duration: 2000,
         useNativeDriver: true,
-      }).start(({finished}) => {
+      }).start(({ finished }) => {
         if (emergencyStore.getIsEmergency) {
           emergencyStore.endEmergency();
         }
       });
     };
 
-    return (      
-      <SafeAreaView style={{flex: 1}}>
-      {/* <SafeAreaView style={styles.container}> */}
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        {/* <SafeAreaView style={styles.container}> */}
         <Layout style={styles.container}>
-        <Animated.View
-          style={{
-            height: 200,
-            width: 200,
-            position: 'absolute',
-            backgroundColor: '#FF4C00',
-            borderRadius: 100,
-            transform: [
-              {
-                scale: animationValue.interpolate({
-                  inputRange: [0, 3],
-                  outputRange: [1, 7],
-                }),
-              },
-            ],
-          }}
-        />
+          <Animated.View
+            style={{
+              height: 200,
+              width: 200,
+              position: 'absolute',
+              backgroundColor: '#FF4C00',
+              borderRadius: 100,
+              transform: [
+                {
+                  scale: animationValue.interpolate({
+                    inputRange: [0, 3],
+                    outputRange: [1, 7],
+                  }),
+                },
+              ],
+            }}
+          />
 
-        <Pressable
-          onPress={() => {
-            runResetAnimation();
-          }}
-          android_ripple={{color: '#ff4C00', borderless: true}}
-          onLongPress={async () => {
-            runAnimationAndBeginEmergency();
+          <Pressable
+            onPress={() => {
+              runResetAnimation();
+            }}
+            android_ripple={{ color: '#ff4C00', borderless: true }}
+            onLongPress={async () => {
+              runAnimationAndBeginEmergency();
 
-            // emergencyStore.initializeEmergency().then(() => {
-            // TODO: I want to move this alert to trigger when I receive the push notification, which will prove the event made it to the DB.
-            // Need to figure out how to subscribe all relevant parties to this a particular emergency, to receive updates on it.
-            // Alert.alert(
-            //   'Your call for help has been sent!',
-            //   'Please call 911 while waiting for a rescuer to respond',
-            //   [
-            //     {
-            //       text: 'Add Details',
-            //       onPress: () => (
-            //         navigation.navigate('Symptoms'), Vibration.vibrate(200)
-            //       ),
-            //       style: 'cancel',
-            //     },
-            //     {
-            //       text: 'Call 911',
-            //       onPress: () => (
-            //         // TODO: Add police phone number here. Localize for geographic location.
-            //         Linking.openURL('tel:000'), Vibration.vibrate(200)
-            //       ),
-            //       style: 'cancel',
-            //     },
-            //   ],
-            //   {
-            //     cancelable: true,
-            //   },
-            // );
-            // }),
-            Vibration.vibrate(200);
-          }}
+              // emergencyStore.initializeEmergency().then(() => {
+              // TODO: I want to move this alert to trigger when I receive the push notification, which will prove the event made it to the DB.
+              // Need to figure out how to subscribe all relevant parties to this a particular emergency, to receive updates on it.
+              // Alert.alert(
+              //   'Your call for help has been sent!',
+              //   'Please call 911 while waiting for a Hero to respond',
+              //   [
+              //     {
+              //       text: 'Add Details',
+              //       onPress: () => (
+              //         navigation.navigate('Symptoms'), Vibration.vibrate(200)
+              //       ),
+              //       style: 'cancel',
+              //     },
+              //     {
+              //       text: 'Call 911',
+              //       onPress: () => (
+              //         // TODO: Add police phone number here. Localize for geographic location.
+              //         Linking.openURL('tel:000'), Vibration.vibrate(200)
+              //       ),
+              //       style: 'cancel',
+              //     },
+              //   ],
+              //   {
+              //     cancelable: true,
+              //   },
+              // );
+              // }),
+              Vibration.vibrate(200);
+            }}
             style={styles.alertButton}>
-            
-          <View style={styles.alertButton}>
-            <Text style={styles.alertButton__text}>
-              {emergencyStore.getIsEmergency ? 'CANCEL' : 'GET HELP'}
-            </Text>
-          </View>
+            <View style={styles.alertButton}>
+              <Text style={styles.alertButton__text}>
+                {emergencyStore.getIsEmergency ? 'CANCEL' : 'GET HELP'}
+              </Text>
+            </View>
           </Pressable>
-          </Layout>
+        </Layout>
       </SafeAreaView>
     );
   },
 );
 
 export default HomeScreen;
-
 
 const styles = StyleSheet.create({
   container: {

@@ -4,8 +4,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './screens/Home.component';
 import SymptomsScreen from './screens/Symptoms.component';
 import HeroScreen from './screens/Hero.component';
-import LocationDetailsScreen from './screens/LocationDetails.component';
+// import LocationDetailsScreen from './screens/LocationDetails.component';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Icon as Ionicon } from 'react-native-vector-icons/Ionicons';
+import SettingsScreen from './screens/Settings.component';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -35,7 +37,7 @@ const HomeNavigator = () => (
         },
       }}
     />
-    <Screen
+    {/* <Screen
       name="LocationDetails"
       component={LocationDetailsScreen}
       options={{
@@ -43,13 +45,22 @@ const HomeNavigator = () => (
           return <Icon size={25} name="map-marker-radius-outline" />;
         },
       }}
-    />
+    /> */}
     <Screen
       name="Hero"
       component={HeroScreen}
       options={{
         tabBarIcon: () => {
           return <Icon size={25} name="trophy-outline" />;
+        },
+      }}
+    />
+    <Screen
+      name="Settings"
+      component={SettingsScreen}
+      options={{
+        tabBarIcon: () => {
+          return <Ionicon size={25} name="settings-outline" />;
         },
       }}
     />

@@ -1,64 +1,66 @@
 import { Layout } from '@ui-kitten/components';
-import {observer} from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import {Button, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import {TextInput} from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 
-const LocationDetailsScreen = observer(({navigation}: {navigation: any}) => {
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-    <Layout style={styles.container}>
-      <View style={styles.card__container}>
-        <Text style={{color: 'black'}}>FLOOR NUMBER</Text>
-        <TextInput
-          keyboardType={'phone-pad'}
-          style={{
-            height: 70,
-            width: '90%',
-            borderColor: 'gray',
-            borderWidth: 1,
-          }}
-        />
-        <Text style={{color: 'black'}}>APARTMENT NUMBER</Text>
-        <TextInput
-          keyboardType={'numeric'}
-          style={{
-            height: 70,
-            width: '90%',
-            borderColor: 'gray',
-            borderWidth: 1,
-          }}
-        />
-        <Text style={{color: 'black'}}>DOOR CODE</Text>
-        <TextInput
-          keyboardType={'numeric'}
-          style={{
-            height: 70,
-            width: '90%',
-            borderColor: 'gray',
-            borderWidth: 1,
-          }}
-        />
-        <Text style={{color: 'black'}}>OTHER INFORMATION</Text>
-        <TextInput
-          style={{
-            height: 70,
-            width: '90%',
-            borderColor: 'gray',
-            borderWidth: 1,
-          }}
-        />
-        <Button
-          title="Continue"
-          onPress={() => navigation.navigate('First Responder')}>
-          <Text>CONTINUE</Text>
-        </Button>
-      </View>
-      </Layout >
-    </SafeAreaView>
-  );
-});
+const LocationDetailsScreen = observer(
+  ({ navigation }: { navigation: any }) => {
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <Layout style={styles.container}>
+          <View style={styles.card__container}>
+            <Text style={{ color: 'black' }}>FLOOR NUMBER</Text>
+            <TextInput
+              keyboardType={'phone-pad'}
+              style={{
+                height: 70,
+                width: '90%',
+                borderColor: 'gray',
+                borderWidth: 1,
+              }}
+            />
+            <Text style={{ color: 'black' }}>APARTMENT NUMBER</Text>
+            <TextInput
+              keyboardType={'numeric'}
+              style={{
+                height: 70,
+                width: '90%',
+                borderColor: 'gray',
+                borderWidth: 1,
+              }}
+            />
+            <Text style={{ color: 'black' }}>DOOR CODE</Text>
+            <TextInput
+              keyboardType={'numeric'}
+              style={{
+                height: 70,
+                width: '90%',
+                borderColor: 'gray',
+                borderWidth: 1,
+              }}
+            />
+            <Text style={{ color: 'black' }}>OTHER INFORMATION</Text>
+            <TextInput
+              style={{
+                height: 70,
+                width: '90%',
+                borderColor: 'gray',
+                borderWidth: 1,
+              }}
+            />
+            <Button
+              title="Continue"
+              onPress={() => navigation.navigate('Hero')}>
+              <Text>CONTINUE</Text>
+            </Button>
+          </View>
+        </Layout>
+      </SafeAreaView>
+    );
+  },
+);
 
 export default LocationDetailsScreen;
 
