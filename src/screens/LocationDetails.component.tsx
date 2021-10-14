@@ -55,7 +55,7 @@ const LocationDetailsScreen = observer(
               onPress={() => navigation.navigate('Hero')}>
               <Text>CONTINUE</Text>
             </Button>
-          </Layo>
+          </Layout>
         </Layout>
       </SafeAreaView>
     );

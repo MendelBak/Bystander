@@ -4,11 +4,12 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
 import { AppNavigator } from './src/Navigation.component';
 import { LogBox } from 'react-native';
+import { customTheme } from './custom-theme';
 
 export default (): React.ReactFragment => (
   <>
     <IconRegistry icons={EvaIconsPack} />
-    <ApplicationProvider {...eva} theme={eva.light}>
+    <ApplicationProvider {...eva} theme={{ ...eva.light, ...customTheme }}>
       <AppNavigator />
     </ApplicationProvider>
   </>
