@@ -23,8 +23,10 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               emergencyStore.updateSymptom(SYMPTOMS.CHOKING)
             )}
             style={styles.card}>
-            <Text>Choking</Text>
-            <FontistoIcon size={50} name="open-mouth"></FontistoIcon>
+            <Layout style={styles.card_inner}>
+              <Text>Choking</Text>
+              <FontistoIcon size={50} name="open-mouth"></FontistoIcon>
+            </Layout>
           </Card>
           <Card
             status={getSymptoms.drowning ? 'success' : 'basic'}
@@ -33,8 +35,10 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               emergencyStore.updateSymptom(SYMPTOMS.DROWNING)
             )}
             style={styles.card}>
-            <Text>Drowning</Text>
-            <Icon size={50} name="swim" />
+            <Layout style={styles.card_inner}>
+              <Text>Drowning</Text>
+              <Icon size={50} name="swim" />
+            </Layout>
           </Card>
           <Card
             style={styles.card}
@@ -43,8 +47,10 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.HEMMORAGING)
             )}>
-            <Text>Heavy Bleeding</Text>
-            <FontistoIcon size={50} name="blood-drop"></FontistoIcon>
+            <Layout style={styles.card_inner}>
+              <Text>Heavy Bleeding</Text>
+              <FontistoIcon size={50} name="blood-drop"></FontistoIcon>
+            </Layout>
           </Card>
           <Card
             style={styles.card}
@@ -53,8 +59,10 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.BLUNT_TRAUMA)
             )}>
-            <Text>Blunt Trauma</Text>
-            <FontAwesome5Icon size={50} name="car-crash"></FontAwesome5Icon>
+            <Layout style={styles.card_inner}>
+              <Text>Blunt Trauma</Text>
+              <FontAwesome5Icon size={50} name="car-crash"></FontAwesome5Icon>
+            </Layout>
           </Card>
           <Card
             style={styles.card}
@@ -63,8 +71,10 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.CARDIAC_ARREST)
             )}>
-            <Text>Cardiac Arrest</Text>
-            <Icon size={50} name="heart-pulse" />
+            <Layout style={styles.card_inner}>
+              <Text>Cardiac Arrest</Text>
+              <Icon size={50} name="heart-pulse" />
+            </Layout>
           </Card>
           <Card
             style={styles.card}
@@ -73,8 +83,10 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.OTHER)
             )}>
-            <Text>Other</Text>
-            <Icon size={50} name="settings-helper"></Icon>
+            <Layout style={{ ...styles.card_inner }}>
+              <Text>Other</Text>
+              <Icon size={50} name="help-outline"></Icon>
+            </Layout>
           </Card>
         </Layout>
         <Layout style={styles.next_button_container}>
@@ -85,7 +97,9 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               navigation.navigate('Hero')
             )}
             status="success"
-            accessoryRight={<Icon size={20} name="check-underline" />}>
+            accessoryRight={
+              <Icon size={20} name="check-underline" color="white" />
+            }>
             Update
           </Button>
         </Layout>
@@ -120,23 +134,19 @@ const styles = StyleSheet.create({
   },
   card: {
     margin: 10,
-    // backgroundColor: 'grey',
     height: '20%',
     width: '40%',
     borderRadius: 15,
+  },
+  card_inner: {
     display: 'flex',
-    // alignItems: 'center',
-    justifyContent: 'center',
-    // flexDirection: 'column',
-    // borderWidth: 2,
-    // borderColor: 'red',
-    // marginBottom: 100,
+    justifyContent: 'space-around',
+    height: '100%',
+    alignItems: 'center',
   },
   selected_card: {
     height: '20%',
     width: '40%',
     borderColor: 'green',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
 });
