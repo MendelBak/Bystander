@@ -1,6 +1,6 @@
 // External
-import {makeAutoObservable} from 'mobx';
-import {FCM_CHANNEL_ID} from '../common/enums';
+import { makeAutoObservable } from 'mobx';
+import { FCM_CHANNEL_ID } from '../common/consts';
 
 // Internal
 import UserModel from '../models/user.model';

@@ -5,7 +5,7 @@ import { StyleSheet, Vibration, Text, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { default as FontistoIcon } from 'react-native-vector-icons/Fontisto';
 import { default as FontAwesome5Icon } from 'react-native-vector-icons/FontAwesome5';
-import { SYMPTOMS } from '../common/enums';
+import { SYMPTOMS, iconTypes } from '../common/consts';
 import rootStore from '../stores/root.store';
 
 const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
@@ -25,7 +25,9 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             style={styles.card}>
             <Layout style={styles.card_inner}>
               <Text>Choking</Text>
-              <FontistoIcon size={50} name="open-mouth"></FontistoIcon>
+              <FontistoIcon
+                size={50}
+                name={iconTypes.choking.name}></FontistoIcon>
             </Layout>
           </Card>
           <Card
@@ -37,7 +39,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             style={styles.card}>
             <Layout style={styles.card_inner}>
               <Text>Drowning</Text>
-              <Icon size={50} name="swim" />
+              <Icon size={50} name={iconTypes.drowning.name} />
             </Layout>
           </Card>
           <Card
@@ -49,7 +51,9 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             )}>
             <Layout style={styles.card_inner}>
               <Text>Heavy Bleeding</Text>
-              <FontistoIcon size={50} name="blood-drop"></FontistoIcon>
+              <FontistoIcon
+                size={50}
+                name={iconTypes.hemmoraging.name}></FontistoIcon>
             </Layout>
           </Card>
           <Card
@@ -61,7 +65,9 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             )}>
             <Layout style={styles.card_inner}>
               <Text>Blunt Trauma</Text>
-              <FontAwesome5Icon size={50} name="car-crash"></FontAwesome5Icon>
+              <FontAwesome5Icon
+                size={50}
+                name={iconTypes.bluntTrauma.name}></FontAwesome5Icon>
             </Layout>
           </Card>
           <Card
@@ -73,7 +79,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             )}>
             <Layout style={styles.card_inner}>
               <Text>Cardiac Arrest</Text>
-              <Icon size={50} name="heart-pulse" />
+              <Icon size={50} name={iconTypes.cardiacArrest.name} />
             </Layout>
           </Card>
           <Card
@@ -85,10 +91,12 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             )}>
             <Layout style={{ ...styles.card_inner }}>
               <Text>Other</Text>
-              <Icon size={50} name="help"></Icon>
+              <Icon size={50} name={iconTypes.other.name}></Icon>
             </Layout>
           </Card>
         </Layout>
+
+        {/* TODO: Defer update to button press? Currently updating on card press, so button is redundant */}
         <Layout style={styles.next_button_container}>
           <Button
             onPress={() => (

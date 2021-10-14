@@ -9,8 +9,11 @@ import {
 } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { default as FontistoIcon } from 'react-native-vector-icons/Fontisto';
+import { default as FontAwesome5Icon } from 'react-native-vector-icons/FontAwesome5';
 import rootStore from '../stores/root.store';
-import { Layout, useTheme, Text } from '@ui-kitten/components';
+import { Layout, useTheme, Text, Divider } from '@ui-kitten/components';
+import { iconTypes } from '../common/consts';
 
 const HeroScreen = observer(() => {
   const { emergencyStore } = rootStore;
@@ -28,6 +31,41 @@ const HeroScreen = observer(() => {
       <Layout style={styles.container}>
         {getIsEmergency ? (
           <>
+            <Layout style={styles.info_banner}>
+              <Layout style={styles.symptoms_icons}>
+                {getSymptoms.cardiacArrest ? (
+                  <Icon size={30} name={iconTypes.cardiacArrest.name}></Icon>
+                ) : null}
+                {getSymptoms.bluntTrauma ? (
+                  <FontAwesome5Icon
+                    size={30}
+                    name={iconTypes.bluntTrauma.name}></FontAwesome5Icon>
+                ) : null}
+                {getSymptoms.choking ? (
+                  <FontistoIcon
+                    size={30}
+                    name={iconTypes.choking.name}></FontistoIcon>
+                ) : null}
+                {getSymptoms.drowning ? (
+                  <Icon size={30} name={iconTypes.drowning.name} />
+                ) : null}
+                {getSymptoms.hemmoraging ? (
+                  <FontistoIcon
+                    size={30}
+                    name={iconTypes.hemmoraging.name}></FontistoIcon>
+                ) : null}
+                {getSymptoms.other ? (
+                  <Icon size={30} name={iconTypes.other.name}></Icon>
+                ) : null}
+              </Layout>
+            </Layout>
+            <Divider
+              style={{
+                backgroundColor: theme['color-info-100'],
+                width: '100%',
+              }}
+            />
+
             <Pressable style={styles.welcome}>
               <Text>Location of Emergency (Data Is For Testing)</Text>
 
@@ -117,15 +155,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     backgroundColor: '#F0F0F3',
   },
+  info_banner: {
+    width: '100%',
+    height: '8%',
+    backgroundColor: '#F3F3F0',
+  },
+  symptoms_icons: {
+    backgroundColor: '#F3F3F0',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '100%',
+    height: '100%',
+  },
   welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-    borderWidth: 2,
-    color: 'black',
+    // fontSize: 20,
+    // textAlign: 'center',
+    // margin: 10,
+    // borderWidth: 2,
+    // color: 'black',
     backgroundColor: 'grey',
   },
   alertButton: {

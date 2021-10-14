@@ -9,7 +9,7 @@ import * as RootNavigation from '../../RootNavigation';
 import EmergencyLocationModel from '../models/emergencyLocation.model';
 import SymptomModel from '../models/symptom.model';
 import EmergencyModel from '../models/emergency.model';
-import { SYMPTOMS } from '../common/enums';
+import { SYMPTOMS } from '../common/consts';
 import { URI } from '../../URI';
 
 export default class EmergencyStore {

@@ -1,5 +1,5 @@
 import PushNotification from 'react-native-push-notification';
-import {FCM_CHANNEL_ID} from '../common/enums';
+import { FCM_CHANNEL_ID } from '../common/consts';
 
 class NotificationSubscriptionService {
   constructor() {
