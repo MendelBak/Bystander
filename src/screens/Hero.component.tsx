@@ -13,7 +13,7 @@ import { default as FontistoIcon } from 'react-native-vector-icons/Fontisto';
 import { default as FontAwesome5Icon } from 'react-native-vector-icons/FontAwesome5';
 import rootStore from '../stores/root.store';
 import { Layout, useTheme, Text, Divider } from '@ui-kitten/components';
-import { iconTypes } from '../common/consts';
+import { iconTypes, SYMPTOMS } from '../common/consts';
 
 const HeroScreen = observer(() => {
   const { emergencyStore } = rootStore;
@@ -25,6 +25,24 @@ const HeroScreen = observer(() => {
     getHeroes,
     nearestIntersection,
   } = emergencyStore;
+
+  const symptomsAreNotReported = () => {
+    const symptomsArr: any = [];
+    Object.keys(getSymptoms).forEach(symptom => {
+      if (getSymptoms[symptom] === true) {
+        symptomsArr.push(symptom);
+      }
+    });
+
+    if (
+      symptomsArr.length === 0 ||
+      (symptomsArr.length === 1 && symptomsArr[0] === SYMPTOMS.OTHER)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -54,7 +72,7 @@ const HeroScreen = observer(() => {
                     size={30}
                     name={iconTypes.hemmoraging.name}></FontistoIcon>
                 ) : null}
-                {getSymptoms.other ? (
+                {getSymptoms.other || symptomsAreNotReported() ? (
                   <Icon size={30} name={iconTypes.other.name}></Icon>
                 ) : null}
               </Layout>
