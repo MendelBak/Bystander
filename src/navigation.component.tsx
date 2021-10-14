@@ -6,7 +6,7 @@ import SymptomsScreen from './screens/Symptoms.component';
 import HeroScreen from './screens/Hero.component';
 // import LocationDetailsScreen from './screens/LocationDetails.component';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Icon as Ionicon } from 'react-native-vector-icons/Ionicons';
+import { default as Ionicon } from 'react-native-vector-icons/Ionicons';
 import SettingsScreen from './screens/Settings.component';
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -33,7 +33,7 @@ const HomeNavigator = () => (
       component={SymptomsScreen}
       options={{
         tabBarIcon: () => {
-          return <Icon size={25} name="format-list-bulleted-triangle" />;
+          return <Icon size={25} name="format-list-bulleted" />;
         },
       }}
     />

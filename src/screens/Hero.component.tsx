@@ -27,12 +27,12 @@ const HeroScreen = observer(() => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={styles.container}>
-        <View style={styles.emergencyStatus}>
+        <Layout style={styles.emergencyStatus}>
           <Text>
             {getIsEmergency ? 'EMERGENCY IN PROGRESS' : 'NO EMERGENCY'}
           </Text>
           <Text>{getHeroes ? `: ${getHeroes}` : ''}</Text>
-        </View>
+        </Layout>
 
         {getIsEmergency ? (
           <>
@@ -68,12 +68,12 @@ const HeroScreen = observer(() => {
                 )
               )}
               style={styles.alertButton}>
-              <View style={styles.alertButton}>
+              <Layout style={styles.alertButton}>
                 <Text style={styles.alertButton__text}>I'M ON MY WAY!</Text>
-              </View>
+              </Layout>
             </Pressable>
 
-            <View
+            <Layout
               style={{
                 backgroundColor: 'grey',
                 width: 'auto',
@@ -87,12 +87,12 @@ const HeroScreen = observer(() => {
               <Text>-- Hemmoraging: {getSymptoms.hemmoraging.toString()}</Text>
               <Text>-- Blunt Trauma: {getSymptoms.bluntTrauma.toString()}</Text>
               <Text>-- Other: {getSymptoms.other.toString()}</Text>
-            </View>
+            </Layout>
           </>
         ) : null}
 
         {getIsEmergency && getHeroes.length > 0 ? (
-          <View style={{ marginTop: 15 }}>
+          <Layout style={{ marginTop: 15 }}>
             <Button
               title="I Can't Help Anymore"
               // TODO: Need to replace this fake ID with real ID.
@@ -100,7 +100,7 @@ const HeroScreen = observer(() => {
                 emergencyStore.removeHero('123'), Vibration.vibrate(50)
               )}
             />
-          </View>
+          </Layout>
         ) : null}
       </Layout>
     </SafeAreaView>

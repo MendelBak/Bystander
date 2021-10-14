@@ -1,8 +1,10 @@
 import { Button, Card, Layout } from '@ui-kitten/components';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import { StyleSheet, Vibration, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Vibration, Text, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { default as FontistoIcon } from 'react-native-vector-icons/Fontisto';
+import { default as FontAwesome5Icon } from 'react-native-vector-icons/FontAwesome5';
 import { SYMPTOMS } from '../common/enums';
 import rootStore from '../stores/root.store';
 
@@ -13,7 +15,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={styles.container}>
-        <View style={styles.card__container}>
+        <Layout style={styles.card__container}>
           <Card
             status={getSymptoms.choking ? 'success' : 'basic'}
             onPress={() => (
@@ -22,6 +24,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             )}
             style={styles.card}>
             <Text>Choking</Text>
+            <FontistoIcon size={50} name="open-mouth"></FontistoIcon>
           </Card>
           <Card
             status={getSymptoms.drowning ? 'success' : 'basic'}
@@ -40,7 +43,8 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.HEMMORAGING)
             )}>
-            <Text>Hemmoraging</Text>
+            <Text>Heavy Bleeding</Text>
+            <FontistoIcon size={50} name="blood-drop"></FontistoIcon>
           </Card>
           <Card
             style={styles.card}
@@ -50,6 +54,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               emergencyStore.updateSymptom(SYMPTOMS.BLUNT_TRAUMA)
             )}>
             <Text>Blunt Trauma</Text>
+            <FontAwesome5Icon size={50} name="car-crash"></FontAwesome5Icon>
           </Card>
           <Card
             style={styles.card}
@@ -59,6 +64,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               emergencyStore.updateSymptom(SYMPTOMS.CARDIAC_ARREST)
             )}>
             <Text>Cardiac Arrest</Text>
+            <Icon size={50} name="heart-pulse" />
           </Card>
           <Card
             style={styles.card}
@@ -68,9 +74,10 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
               emergencyStore.updateSymptom(SYMPTOMS.OTHER)
             )}>
             <Text>Other</Text>
+            <Icon size={50} name="settings-helper"></Icon>
           </Card>
-        </View>
-        <View style={styles.next_button_container}>
+        </Layout>
+        <Layout style={styles.next_button_container}>
           <Button
             onPress={() => (
               Vibration.vibrate(50),
@@ -81,7 +88,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             accessoryRight={<Icon size={20} name="check-underline" />}>
             Update
           </Button>
-        </View>
+        </Layout>
       </Layout>
     </SafeAreaView>
   );
@@ -117,19 +124,18 @@ const styles = StyleSheet.create({
     height: '20%',
     width: '40%',
     borderRadius: 15,
-    // display: 'flex',
+    display: 'flex',
     // alignItems: 'center',
-    // justifyContent: 'flex-start',
+    justifyContent: 'center',
+    // flexDirection: 'column',
     // borderWidth: 2,
     // borderColor: 'red',
     // marginBottom: 100,
   },
   selected_card: {
-    // margin: 2,
     height: '20%',
     width: '40%',
     borderColor: 'green',
-
     // alignItems: 'center',
     // justifyContent: 'center',
   },

@@ -1,3 +1,4 @@
+import { Layout } from '@ui-kitten/components';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Text, View, StyleSheet, Switch } from 'react-native';
@@ -13,7 +14,7 @@ const SettingsScreen = observer(
     };
 
     return (
-      <View style={styles.container}>
+      <Layout style={styles.container}>
         <Text>I WANT TO BE A HERO</Text>
 
         <Switch
@@ -23,7 +24,7 @@ const SettingsScreen = observer(
           onValueChange={toggleHeroStatus}
           value={user.isHero}
         />
-        <View style={styles.heroSubtextView}>
+        <Layout style={styles.heroSubtextView}>
           <Text style={styles.heroSubtext}>
             Opt me into receiving messages about emergencies in my area.
           </Text>
@@ -31,8 +32,8 @@ const SettingsScreen = observer(
           <Text style={styles.heroSubtext}>
             By selecting this option, I affirm that I am a trained Hero.
           </Text>
-        </View>
-      </View>
+        </Layout>
+      </Layout>
     );
   },
 );

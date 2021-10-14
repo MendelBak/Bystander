@@ -10,7 +10,7 @@ const LocationDetailsScreen = observer(
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <Layout style={styles.container}>
-          <View style={styles.card__container}>
+          <Layout style={styles.card__container}>
             <Text style={{ color: 'black' }}>FLOOR NUMBER</Text>
             <TextInput
               keyboardType={'phone-pad'}
@@ -55,7 +55,7 @@ const LocationDetailsScreen = observer(
               onPress={() => navigation.navigate('Hero')}>
               <Text>CONTINUE</Text>
             </Button>
-          </View>
+          </Layo>
         </Layout>
       </SafeAreaView>
     );

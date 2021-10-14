@@ -78,7 +78,6 @@ export default class EmergencyStore {
       .catch(err => {
         console.log('Error getting emergencies', err);
       });
-    // return emergencies;
   }
 
   get getHeroes(): string[] {
@@ -166,7 +165,7 @@ export default class EmergencyStore {
   };
   //#endregion location
 
-  // TODO: Should probably be in its own store.
+  // TODO: Should probably be in its own, Symptoms, store.
   //#region symptoms
   updateSymptom(symptom: SYMPTOMS): void {
     this.emergency.symptom[symptom] = !this.emergency.symptom[symptom];

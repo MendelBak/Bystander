@@ -143,11 +143,11 @@ const HomeScreen = observer(
               Vibration.vibrate(200);
             }}
             style={styles.alertButton}>
-            <View style={styles.alertButton}>
+            <Layout style={styles.alertButton}>
               <Text style={styles.alertButton__text}>
                 {emergencyStore.getIsEmergency ? 'CANCEL' : 'GET HELP'}
               </Text>
-            </View>
+            </Layout>
           </Pressable>
         </Layout>
       </SafeAreaView>
