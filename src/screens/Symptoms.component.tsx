@@ -85,7 +85,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             )}>
             <Layout style={{ ...styles.card_inner }}>
               <Text>Other</Text>
-              <Icon size={50} name="help-outline"></Icon>
+              <Icon size={50} name="help"></Icon>
             </Layout>
           </Card>
         </Layout>
@@ -113,9 +113,6 @@ export default SymptomsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderWidth: 2,
-    borderColor: 'grey',
-    backgroundColor: 'white',
   },
   card__container: {
     backgroundColor: '#F3F3F0',
@@ -142,6 +139,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-around',
     height: '100%',
+    borderRadius: 15,
     alignItems: 'center',
   },
   selected_card: {

@@ -1,30 +1,8 @@
-// import React from 'react';
-// import {SafeAreaView} from 'react-native';
-// import {Button, Divider, Layout, TopNavigation} from '@ui-kitten/components';
-
-// export const HomeScreen = ({navigation}) => {
-//   const navigateDetails = () => {
-//     navigation.navigate('Details');
-//   };
-
-//   return (
-//     <SafeAreaView style={{flex: 1}}>
-//       <TopNavigation title="MyApp" alignment="center" />
-//       <Divider />
-//       <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-//         <Button onPress={navigateDetails}>OPEN DETAILS</Button>
-//       </Layout>
-//     </SafeAreaView>
-//   );
-// };
-
-// External
 import { Layout } from '@ui-kitten/components';
 import { observer } from 'mobx-react-lite';
 import React, { useRef } from 'react';
 import {
   Text,
-  View,
   Pressable,
   Vibration,
   StyleSheet,
@@ -84,7 +62,6 @@ const HomeScreen = observer(
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        {/* <SafeAreaView style={styles.container}> */}
         <Layout style={styles.container}>
           <Animated.View
             style={{

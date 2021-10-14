@@ -4,18 +4,17 @@ import {
   Pressable,
   StyleSheet,
   Vibration,
-  Text,
-  View,
   Button,
   SafeAreaView,
 } from 'react-native';
 import { observer } from 'mobx-react-lite';
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import rootStore from '../stores/root.store';
-import { Layout } from '@ui-kitten/components';
+import { Layout, useTheme, Text } from '@ui-kitten/components';
 
 const HeroScreen = observer(() => {
   const { emergencyStore } = rootStore;
+  const theme = useTheme();
   const {
     getEmergencyLocation,
     getIsEmergency,
@@ -27,13 +26,6 @@ const HeroScreen = observer(() => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={styles.container}>
-        <Layout style={styles.emergencyStatus}>
-          <Text>
-            {getIsEmergency ? 'EMERGENCY IN PROGRESS' : 'NO EMERGENCY'}
-          </Text>
-          <Text>{getHeroes ? `: ${getHeroes}` : ''}</Text>
-        </Layout>
-
         {getIsEmergency ? (
           <>
             <Pressable style={styles.welcome}>
@@ -89,7 +81,19 @@ const HeroScreen = observer(() => {
               <Text>-- Other: {getSymptoms.other.toString()}</Text>
             </Layout>
           </>
-        ) : null}
+        ) : (
+          <Layout style={styles.no_emergency_notice}>
+            <Icon
+              size={100}
+              name="hand-peace"
+              style={{
+                color: theme['color-primary-default'],
+              }}></Icon>
+            <Text category="h4">No emergencies in your area</Text>
+
+            <Text category="h6">Enjoy your day!</Text>
+          </Layout>
+        )}
 
         {getIsEmergency && getHeroes.length > 0 ? (
           <Layout style={{ marginTop: 15 }}>
@@ -162,5 +166,12 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     fontFamily: 'monospace',
+  },
+  no_emergency_notice: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    backgroundColor: '#F0F0F3',
   },
 });
