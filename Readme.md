@@ -20,6 +20,7 @@ Navigate inside the `/Bystander` directory and open two terminal windows.
 - Save emergency contacts and call/email/text if emergency is underway. (How to know this user has emergency?)
 - Display address of emergency (reverse geocoding based on lat/long. Use Google's Geocoding API )
 - Users within a 20 meter radius have push notification / popup on their (even locked) phone screens, requester scans the code for the victim which alerts his emergency contacts and display allergies and other important information (medical preferences, medical contacts, relevant health issues).
+- Create audio/text/video communications channel for all relevant parties (all responding Heroes) to an event, so they can coordinate. PushToTalk walkie/talkie feature?
 - Auto-engage audio and video recordings from requesters phone, for use by police (potential legal/privacy issues).
 - Responders need to upload certifications and be verified by admins.
 - Three tiers of rescuers? Basic (Non-licensed citizens who have basic First Aid skills). Level 2 Rescuer (EMT, nurses) and Advanced Rescuer (Doctors, Paramedics). - Show level of rescuer responding so that Advanced rescuer will join if only Basic Rescuer were answering.
@@ -28,9 +29,9 @@ Navigate inside the `/Bystander` directory and open two terminal windows.
 - Easy to follow animations on screen for bystanders for CPR/ bleeding prevention, etc.
 - Wider alert range in suburban/rural areas. Smaller range in urban areas. Increase range if no rescuers found.
 - The first firstResponder is in charge of the scene. Need to determine who that is (first to accept request or first on scene?). Save that user for legal purposes. (Can just keep PrimaryResponder as first in the array instead of making a special attribute, probably.)
-- Level 2 or Advanced rescuers become in charge of emergency if they come to a scene with only a Basic Rescuer.
-- Auto Video and voice capture.
-- Override DO NOT DISTURB mode on rescuers phones for emergency alert and on requesters' phone for follow up alerts.
+- Level 2 or Advanced Heroes become in charge of emergency if they come to a scene with only a Basic Rescuer.
+- Auto Video and voice capture?
+- Override DO NOT DISTURB mode on Heroes phones' for emergency alert and on Bystanders' phone for follow up alerts.
 - Set times when Heroes are available or when they are not, and should not receive alerts.
 - Tipping Heroes after rescue (victim and bystanders). Hero can choose to send tip to charity instead of taking the tip.
 - Insurance for Heroes. Offer it as an upgradeable option?
@@ -38,29 +39,35 @@ Navigate inside the `/Bystander` directory and open two terminal windows.
 ## General TODO
 
 - PRIORITY: Need to figure out how to prevent Push Notifications to users who opt out and how to persist that choice across app refresh or kill.
-- Upgrade to v6 of React Navigation.
-- Check all packages and upgrade if needed.
-- Install UI Kitten. Design and create layout (including nav. hamburger menu + sliding sidebar menu?), theme, color palette, etc. 
-- Comment out Details page.
+- DONE Upgrade to v6 of React Navigation.
+- DONE Check all packages and upgrade if needed.
+- DONE Install UI Kitten. Design and create layout (including nav. hamburger menu + sliding sidebar menu?), theme, color palette, etc. 
+- DONE Comment out Details page.
+- Rewrite notifications service.
+- Ensure event persistence. If a user kills the app, or the app crashes, during an event, it must return to the correct state after opening it up again.
 - Work on user flow. (Users coming from clicking on notification. Heroes who are also Bystanders. Auto dial 911?)
 
 - Need to figure out way to determine if several calls for help in nearby vicinity are the same emergency. Timing + vicinity + prompt the user?
 - Handle if users don't turn on GPS during call event.
 - Create `Devices` collection to track user's devices. Store FCM token, since they are unique. One-to-many relationship with `users` collection. Allows notifications to be sent to specific users, if needed (primarily needed for peer-to-peer direct messaging)
+- Rebuild the emergency event handling logic (HomeScreen), especially GPS capture.
+- Rewrite how Stores work by implementing a StoreProvider instead of using Singletons.
+- Use MapBox Directions API instead of GoogleMaps.
 
 ## Deployment TODO
 
 - Check TODO Tree for comments to self.
 - DONE - Need to open MongoDB, Google Developers COnsole, Authentication, etc, to all IPs, not just my local IP.
-- How to compile TS to JS for server?
-- Set the GOOGLE_APPLICATION_CREDENTIALS environment variable for the backend firebase-admin API key. Don't use the key stored in the codebase.
-- API key for backend requests (Authorization Headers/ JWT)
+- How to compile TS to JS for server, before deploying?
+- Set the GOOGLE_APPLICATION_CREDENTIALS environment variable for the backend firebase-admin API key. Don't store the key in the codebase.
+- Need to create an API key for backend requests (Authorization Headers/ JWT)
 - DONE - Deploy backend to AWS EC2 or Kubernetes (need Docker for Kubernetes).
 - Add SSL/TLS.
 - Make sure that hardcoded IDs are replaced with real user IDs.
 - DONE - Google Developers Console Credentials page. Need to add authorized origins and redirect URLs from the server (currently only allowing from localhost).
 - Currently using the `Nip.io` wildcard DNS server to allow redirects during OAuth authentication. Need to replace that with my actual domain name, when I purchase it via AWS Route 53 and add an A Record.
-- Figure out CI/DC to Play Store and EC2.
+- CI/DC for deployments to PlayStore and EC2.
+- Restrict Google API key to on ly this package/app (Bystander) after publishing it to the Google Play Store.
 
 ## Potential Monetization Strategies
 

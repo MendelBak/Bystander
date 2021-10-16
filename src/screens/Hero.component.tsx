@@ -4,7 +4,6 @@ import {
   Pressable,
   StyleSheet,
   Vibration,
-  Button,
   SafeAreaView,
 } from 'react-native';
 import { observer } from 'mobx-react-lite';
@@ -12,8 +11,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { default as FontistoIcon } from 'react-native-vector-icons/Fontisto';
 import { default as FontAwesome5Icon } from 'react-native-vector-icons/FontAwesome5';
 import rootStore from '../stores/root.store';
-import { Layout, useTheme, Text, Divider } from '@ui-kitten/components';
+import { Layout, useTheme, Text, Divider, Button } from '@ui-kitten/components';
 import { iconTypes, SYMPTOMS } from '../common/consts';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { useState } from 'react';
 
 const HeroScreen = observer(() => {
   const { emergencyStore } = rootStore;
@@ -25,6 +26,13 @@ const HeroScreen = observer(() => {
     getHeroes,
     nearestIntersection,
   } = emergencyStore;
+
+  const [mapRegion, setMapRegion] = useState({
+    longitude: 35.23445485387196,
+    latitude: 31.77697425929635,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
 
   const symptomsAreNotReported = () => {
     const symptomsArr: any = [];
@@ -44,6 +52,10 @@ const HeroScreen = observer(() => {
     }
   };
 
+  const onRegionChange = newRegion => {
+    setMapRegion(newRegion);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={styles.container}>
@@ -52,89 +64,101 @@ const HeroScreen = observer(() => {
             <Layout style={styles.info_banner}>
               <Layout style={styles.symptoms_icons}>
                 {getSymptoms.cardiacArrest ? (
-                  <Icon size={30} name={iconTypes.cardiacArrest.name}></Icon>
+                  <Icon
+                    color={theme['color-primary-500']}
+                    size={30}
+                    name={iconTypes.cardiacArrest.name}></Icon>
                 ) : null}
                 {getSymptoms.bluntTrauma ? (
                   <FontAwesome5Icon
                     size={30}
+                    color={theme['color-primary-500']}
                     name={iconTypes.bluntTrauma.name}></FontAwesome5Icon>
                 ) : null}
                 {getSymptoms.choking ? (
                   <FontistoIcon
+                    color={theme['color-primary-500']}
                     size={30}
                     name={iconTypes.choking.name}></FontistoIcon>
                 ) : null}
                 {getSymptoms.drowning ? (
-                  <Icon size={30} name={iconTypes.drowning.name} />
+                  <Icon
+                    color={theme['color-primary-500']}
+                    size={30}
+                    name={iconTypes.drowning.name}
+                  />
                 ) : null}
                 {getSymptoms.hemmoraging ? (
                   <FontistoIcon
+                    color={theme['color-primary-500']}
                     size={30}
                     name={iconTypes.hemmoraging.name}></FontistoIcon>
                 ) : null}
                 {getSymptoms.other || symptomsAreNotReported() ? (
-                  <Icon size={30} name={iconTypes.other.name}></Icon>
+                  <Icon
+                    color={theme['color-primary-500']}
+                    size={30}
+                    name={iconTypes.other.name}></Icon>
                 ) : null}
               </Layout>
             </Layout>
             <Divider
               style={{
-                backgroundColor: theme['color-info-100'],
+                backgroundColor: theme['color-primary-500'],
                 width: '100%',
               }}
             />
 
-            <Pressable style={styles.welcome}>
-              <Text>Location of Emergency (Data Is For Testing)</Text>
+            <Layout style={styles.center_section}>
+              <MapView
+                // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                style={styles.map}
+                showsScale
+                showsUserLocation
+                loadingEnabled
+                region={mapRegion}
+                onRegionChangeComplete={newRegion => onRegionChange(newRegion)}
+              />
 
-              <Text style={{ fontSize: 15, color: 'white' }}>
-                Nearest Intersection:
-                {nearestIntersection?.intersection?.street1} -
-                {nearestIntersection?.intersection?.street2}
-              </Text>
-              <Text>
-                Emergency Distance from Intersection:
-                {nearestIntersection?.intersection?.distance}
-              </Text>
-              <Text>Latitude: {getEmergencyLocation.latitude}</Text>
-              <Text>Longitude: {getEmergencyLocation.longitude}</Text>
-            </Pressable>
+              {/* <Pressable>
+                <Text>Location of Emergency (Data Is For Testing)</Text>
 
-            <Pressable
-              disabled={
-                !getIsEmergency ||
-                !getEmergencyLocation.latitude ||
-                !getEmergencyLocation.longitude ||
-                // TODO: Replace this with the ID of the current user instead of this fake userID.
-                getHeroes.includes('Mendel')
-              }
-              onPress={() => (
-                emergencyStore.addHero('123'),
-                Vibration.vibrate(200),
-                Linking.openURL(
-                  `https://www.google.com/maps/search/?api=1&query=${getEmergencyLocation.latitude}+${getEmergencyLocation.longitude}`,
-                )
-              )}
-              style={styles.alertButton}>
-              <Layout style={styles.alertButton}>
-                <Text style={styles.alertButton__text}>I'M ON MY WAY!</Text>
-              </Layout>
-            </Pressable>
+                <Text style={{ fontSize: 15, color: 'white' }}>
+                  Nearest Intersection:
+                  {nearestIntersection?.intersection?.street1} -
+                  {nearestIntersection?.intersection?.street2}
+                </Text>
+                <Text>
+                  Emergency Distance from Intersection:
+                  {nearestIntersection?.intersection?.distance}
+                </Text>
+              </Pressable> */}
+            </Layout>
 
-            <Layout
-              style={{
-                backgroundColor: 'grey',
-                width: 'auto',
-                height: 'auto',
-                padding: 10,
-              }}>
-              <Text style={{ color: 'white' }}>
-                -- Choking: {getSymptoms.choking.toString()}
-              </Text>
-              <Text>-- Drowning: {getSymptoms.drowning.toString()}</Text>
-              <Text>-- Hemmoraging: {getSymptoms.hemmoraging.toString()}</Text>
-              <Text>-- Blunt Trauma: {getSymptoms.bluntTrauma.toString()}</Text>
-              <Text>-- Other: {getSymptoms.other.toString()}</Text>
+            <Layout style={styles.action_buttons}>
+              <Button
+                onPress={() => Vibration.vibrate(200)}
+                style={{
+                  backgroundColor: theme['color-danger-700'],
+                  borderWidth: 0,
+                }}>
+                <Text>I Can't Help</Text>
+              </Button>
+              <Button
+                style={{
+                  backgroundColor: theme['color-success-500'],
+                  borderWidth: 0,
+                }}
+                onPress={() => (
+                  // TODO : Add real user ID here.
+                  emergencyStore.addHero('123'),
+                  Vibration.vibrate(200),
+                  Linking.openURL(
+                    `https://www.google.com/maps/search/?api=1&query=${getEmergencyLocation.latitude}+${getEmergencyLocation.longitude}`,
+                  )
+                )}>
+                <Text>On My Way!</Text>
+              </Button>
             </Layout>
           </>
         ) : (
@@ -150,18 +174,6 @@ const HeroScreen = observer(() => {
             <Text category="h6">Enjoy your day!</Text>
           </Layout>
         )}
-
-        {getIsEmergency && getHeroes.length > 0 ? (
-          <Layout style={{ marginTop: 15 }}>
-            <Button
-              title="I Can't Help Anymore"
-              // TODO: Need to replace this fake ID with real ID.
-              onPress={() => (
-                emergencyStore.removeHero('123'), Vibration.vibrate(50)
-              )}
-            />
-          </Layout>
-        ) : null}
       </Layout>
     </SafeAreaView>
   );
@@ -173,7 +185,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    // justifyContent: 'center',
     backgroundColor: '#F0F0F3',
   },
   info_banner: {
@@ -187,55 +198,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    width: '100%',
     height: '100%',
   },
-  welcome: {
-    // fontSize: 20,
-    // textAlign: 'center',
-    // margin: 10,
-    // borderWidth: 2,
-    // color: 'black',
-    backgroundColor: 'grey',
+  center_section: {
+    height: '82%',
+    width: '100%',
   },
-  alertButton: {
-    backgroundColor: '#ABCBA9',
-    borderColor: 'rgba(0,0,0,0.2)',
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  action_buttons: {
+    display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-  },
-  alertButton__text: {
-    fontSize: 20,
-    color: 'black',
-    fontWeight: 'bold',
-    fontFamily: 'monospace',
-  },
-  emergencyStatus: {
-    height: 50,
-    width: '50%',
-    alignItems: 'center',
-    textAlignVertical: 'top',
-    borderWidth: 2,
-    borderColor: 'red',
-    marginBottom: 100,
-    color: 'grey',
-  },
-  cancelButton: {
-    backgroundColor: 'green',
-    borderColor: 'rgba(0,0,0,0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 200,
-    marginTop: 20,
-  },
-  cancelButton__text: {
-    fontSize: 20,
-    color: 'black',
-    fontWeight: 'bold',
-    fontFamily: 'monospace',
+    flexDirection: 'row',
+    width: '100%',
+    height: '10%',
+    justifyContent: 'space-evenly',
+    backgroundColor: '#F0F0F3',
   },
   no_emergency_notice: {
     display: 'flex',

@@ -51,5 +51,12 @@
       </intent-filter>
     </service>
     <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
+
+<!-- For Google Maps SDK -->
+ <meta-data
+     android:name="com.google.android.maps.v2.API_KEY"
+     android:value="AIzaSyBrwntWqQgM9lkZemsx6Q10S9_lF9167yY"/>
+
+     <uses-library android:name="org.apache.http.legacy" android:required="false"/>
   </application>
 </manifest>
