@@ -1,4 +1,4 @@
-import { Button, Card, Layout } from '@ui-kitten/components';
+import { Button, Card, Layout, useTheme } from '@ui-kitten/components';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import { StyleSheet, Vibration, Text, SafeAreaView } from 'react-native';
@@ -11,6 +11,7 @@ import rootStore from '../stores/root.store';
 const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
   const { emergencyStore } = rootStore;
   const { getSymptoms } = emergencyStore;
+  const theme = useTheme();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -99,6 +100,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
         {/* TODO: Defer update to button press? Currently updating on card press, so button is redundant */}
         <Layout style={styles.next_button_container}>
           <Button
+            style={{ backgroundColor: theme['color-primary-500'] }}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptoms(),

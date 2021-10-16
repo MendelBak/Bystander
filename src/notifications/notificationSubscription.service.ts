@@ -1,27 +1,28 @@
-import PushNotification from 'react-native-push-notification';
+import PushNotification, { Importance } from 'react-native-push-notification';
 import { FCM_CHANNEL_ID } from '../common/consts';
 
+// ! TODO: I know there's some major problems here. I'm trying to implement a singleton for the notification service, but it looks like it's being re-generated every time the app is opened or a notification is received.
 class NotificationSubscriptionService {
   constructor() {
     this.createChannel(
       FCM_CHANNEL_ID.BYSTANDER,
       'Bystander Alerts',
       'Channel to notify Bystanders of emergency events and updates',
-      5,
+      Importance.HIGH,
     );
 
     this.createChannel(
       FCM_CHANNEL_ID.HERO,
       'Hero Alerts',
       'Channel to notify Heroes of emergency events and updates',
-      5,
+      Importance.HIGH,
     );
 
     this.createChannel(
       FCM_CHANNEL_ID.DEFAULT,
       'Default Notification Channel',
       'Default Notification Channel for app communications',
-      5,
+      Importance.HIGH,
     );
 
     PushNotification.getChannels(channel_ids => {
@@ -52,7 +53,7 @@ class NotificationSubscriptionService {
         channelDescription: channelDescription,
         soundName: 'default',
         importance: importance,
-        vibrate: true,
+        // vibrate: true,
       },
       created =>
         console.log(
