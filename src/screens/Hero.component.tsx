@@ -14,7 +14,9 @@ import rootStore from '../stores/root.store';
 import { Layout, useTheme, Text, Divider, Button } from '@ui-kitten/components';
 import { iconTypes, SYMPTOMS } from '../common/consts';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import LottieView from 'lottie-react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HeroScreen = observer(() => {
   const { emergencyStore } = rootStore;
@@ -51,6 +53,15 @@ const HeroScreen = observer(() => {
       return false;
     }
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      heartAnimationRef?.play();
+      return;
+    }, []),
+  );
+
+  let heartAnimationRef: LottieView | null;
 
   const onRegionChange = newRegion => {
     setMapRegion(newRegion);
@@ -162,16 +173,25 @@ const HeroScreen = observer(() => {
             </Layout>
           </>
         ) : (
-          <Layout style={styles.no_emergency_notice}>
-            <Icon
-              size={100}
-              name="hand-peace"
-              style={{
-                color: theme['color-primary-default'],
-              }}></Icon>
-            <Text category="h4">No emergencies in your area</Text>
+          <Layout style={styles.no_emergency_notice_container}>
+            <Pressable
+              onPress={() => heartAnimationRef?.play()}
+              style={styles.animation_wrapper}>
+              <LottieView
+                source={require('../../assets/animations/heart-beat-pop-up.json')}
+                autoPlay
+                loop={false}
+                ref={animation => {
+                  heartAnimationRef = animation;
+                }}
+              />
+            </Pressable>
 
-            <Text category="h6">Enjoy your day!</Text>
+            <Layout style={styles.no_emergency_notice}>
+              <Text category="h4">No emergencies in your area</Text>
+
+              <Text category="h6">Enjoy your day!</Text>
+            </Layout>
           </Layout>
         )}
       </Layout>
@@ -220,11 +240,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     backgroundColor: '#F0F0F3',
   },
+  no_emergency_notice_container: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#F0F0F3',
+  },
+  animation_wrapper: {
+    width: '100%',
+    height: '50%',
+  },
   no_emergency_notice: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
+    justifyContent: 'flex-start',
+    height: '30%',
     backgroundColor: '#F0F0F3',
   },
 });
