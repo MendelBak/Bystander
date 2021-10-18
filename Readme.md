@@ -48,9 +48,8 @@ Navigate inside the `/Bystander` directory and open two terminal windows.
 - Rewrite notifications service.
 - Ensure event persistence. If a user kills the app, or the app crashes, during an event, it must return to the correct state after opening it up again.
 - Work on user flow. (Users coming from clicking on notification. Heroes who are also Bystanders. Auto dial 911?)
-
 - Need to figure out way to determine if several calls for help in nearby vicinity are the same emergency. Timing + vicinity + prompt the user?
-- Handle if users don't turn on GPS during call event.
+- Handle if users don't turn on (or turn off) GPS during call event.
 - Create `Devices` collection to track user's devices. Store FCM token, since they are unique. One-to-many relationship with `users` collection. Allows notifications to be sent to specific users, if needed (primarily needed for peer-to-peer direct messaging)
 - Rebuild the emergency event handling logic (HomeScreen), especially GPS capture.
 - Rewrite how Stores work by implementing a StoreProvider instead of using Singletons.

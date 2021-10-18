@@ -13,8 +13,7 @@ import { default as FontAwesome5Icon } from 'react-native-vector-icons/FontAweso
 import rootStore from '../stores/root.store';
 import { Layout, useTheme, Text, Divider, Button } from '@ui-kitten/components';
 import { iconTypes, SYMPTOMS } from '../common/consts';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LottieView from 'lottie-react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -121,16 +120,6 @@ const HeroScreen = observer(() => {
             />
 
             <Layout style={styles.center_section}>
-              <MapView
-                // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-                style={styles.map}
-                showsScale
-                showsUserLocation
-                loadingEnabled
-                region={mapRegion}
-                onRegionChangeComplete={newRegion => onRegionChange(newRegion)}
-              />
-
               {/* <Pressable>
                 <Text>Location of Emergency (Data Is For Testing)</Text>
 
