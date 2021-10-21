@@ -1,6 +1,6 @@
-import { Layout } from '@ui-kitten/components';
+import { Layout, Toggle } from '@ui-kitten/components';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, Switch } from 'react-native';
 import rootStore from '../stores/root.store';
 
@@ -10,29 +10,32 @@ const SettingsScreen = observer(
     const { user } = userStore;
 
     const toggleHeroStatus = () => {
-      userStore.toggleHeroStatus();
+      userStore.toggleHeroNotifications();
+      setShowNotifications(!showNotifications);
     };
+
+    const [showNotifications, setShowNotifications] = useState(user.isHero);
+    // const useToggleState = (initialState = false) => {
+
+    //   const onCheckedChange = isChecked => {
+    //     setChecked(isChecked);
+    //   };
+
+    //   return { checked, onChange: onCheckedChange };
+    // };
+
+    // const heroNotificationToggleState = useToggleState();
 
     return (
       <Layout style={styles.container}>
-        <Text>I WANT TO BE A HERO</Text>
-
-        <Switch
-          trackColor={{ false: '#767577', true: '#FF4C00' }}
-          thumbColor={user.isHero ? '#f5dd4b' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleHeroStatus}
-          value={user.isHero}
-        />
-        <Layout style={styles.heroSubtextView}>
-          <Text style={styles.heroSubtext}>
-            Opt me into receiving messages about emergencies in my area.
-          </Text>
-
-          <Text style={styles.heroSubtext}>
-            By selecting this option, I affirm that I am a trained Hero.
-          </Text>
-        </Layout>
+        <Toggle
+          // style={styles.toggle}
+          status={showNotifications ? 'success' : 'danger'}
+          checked={showNotifications}
+          // {...heroNotificationToggleState}
+          onChange={toggleHeroStatus}>
+          Allow Emergency Notifications
+        </Toggle>
       </Layout>
     );
   },
@@ -48,11 +51,5 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'grey',
     backgroundColor: '#F0F0F3',
-  },
-  heroSubtextView: {
-    width: 200,
-  },
-  heroSubtext: {
-    fontSize: 10,
   },
 });
