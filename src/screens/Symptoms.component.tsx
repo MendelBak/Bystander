@@ -18,12 +18,11 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
       <Layout style={styles.container}>
         <Layout style={styles.card__container}>
           <Card
-            status={getSymptoms.choking ? 'success' : 'basic'}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.CHOKING)
             )}
-            style={styles.card}>
+            style={getSymptoms.choking ? styles.card : styles.selected_card}>
             <Layout style={styles.card_inner}>
               <Text>Choking</Text>
               <FontistoIcon
@@ -32,20 +31,18 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             </Layout>
           </Card>
           <Card
-            status={getSymptoms.drowning ? 'success' : 'basic'}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.DROWNING)
             )}
-            style={styles.card}>
+            style={getSymptoms.drowning ? styles.card : styles.selected_card}>
             <Layout style={styles.card_inner}>
               <Text>Drowning</Text>
               <Icon size={50} name={iconTypes.drowning.name} />
             </Layout>
           </Card>
           <Card
-            style={styles.card}
-            status={getSymptoms.hemmoraging ? 'success' : 'basic'}
+            style={getSymptoms.hemmoraging ? styles.card : styles.selected_card}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.HEMMORAGING)
@@ -58,8 +55,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             </Layout>
           </Card>
           <Card
-            style={styles.card}
-            status={getSymptoms.bluntTrauma ? 'success' : 'basic'}
+            style={getSymptoms.bluntTrauma ? styles.card : styles.selected_card}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.BLUNT_TRAUMA)
@@ -72,8 +68,9 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             </Layout>
           </Card>
           <Card
-            style={styles.card}
-            status={getSymptoms.cardiacArrest ? 'success' : 'basic'}
+            style={
+              getSymptoms.cardiacArrest ? styles.card : styles.selected_card
+            }
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.CARDIAC_ARREST)
@@ -84,8 +81,7 @@ const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
             </Layout>
           </Card>
           <Card
-            style={styles.card}
-            status={getSymptoms.other ? 'success' : 'basic'}
+            style={getSymptoms.other ? styles.card : styles.selected_card}
             onPress={() => (
               Vibration.vibrate(50),
               emergencyStore.updateSymptom(SYMPTOMS.OTHER)
@@ -145,16 +141,19 @@ const styles = StyleSheet.create({
     width: '40%',
     borderRadius: 15,
   },
+  selected_card: {
+    margin: 10,
+    height: '20%',
+    width: '40%',
+    borderRadius: 15,
+    borderWidth: 3,
+    borderColor: '#FF4C00',
+  },
   card_inner: {
     display: 'flex',
     justifyContent: 'space-around',
     height: '100%',
     borderRadius: 15,
     alignItems: 'center',
-  },
-  selected_card: {
-    height: '20%',
-    width: '40%',
-    borderColor: 'green',
   },
 });
