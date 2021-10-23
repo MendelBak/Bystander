@@ -35,7 +35,7 @@ Navigate inside the `/Bystander` directory and open two terminal windows.
 - Set times when Heroes are available or when they are not, and should not receive alerts.
 - Tipping Heroes after rescue (victim and bystanders). Hero can choose to send tip to charity instead of taking the tip.
 - Insurance for Heroes. Offer it as an upgradeable option?
-- - Map point clustering. GoodSAM doesn't use clustering, which makes their maps really busy when there are multiple locations in one area. Cluster points would show a number on the head, unclustering when zooming closer.
+-  Map point clustering. GoodSAM doesn't use clustering, which makes their maps really busy when there are multiple locations in one area. Cluster points would show a number on the head, unclustering when zooming closer.
 - AR tracking to defib
 
 ## General TODO
@@ -45,6 +45,7 @@ Navigate inside the `/Bystander` directory and open two terminal windows.
 - DONE Check all packages and upgrade if needed.
 - DONE Install UI Kitten. Design and create layout (including nav. hamburger menu + sliding sidebar menu?), theme, color palette, etc. 
 - DONE Comment out Details page.
+- In order to prevent Android from hibernating the app, when unused for long periods of time, make he app an active device admin app. (https://developer.android.com/training/monitoring-device-state/doze-standby#understand_app_standby)
 - Rewrite notifications service.
 - Ensure event persistence. If a user kills the app, or the app crashes, during an event, it must return to the correct state after opening it up again.
 - Work on user flow. (Users coming from clicking on notification. Heroes who are also Bystanders. Auto dial 911?)
@@ -54,7 +55,9 @@ Navigate inside the `/Bystander` directory and open two terminal windows.
 - Rebuild the emergency event handling logic (HomeScreen), especially GPS capture.
 - Rewrite how Stores work by implementing a StoreProvider instead of using Singletons.
 - Use MapBox Directions API instead of GoogleMaps.
+- Use Mapbox Maps instead of GoogleMaps
 - Apply for Google Cloud Startup and Google Crisis Responders status, to get free Google Cloud credits (get much more if recommended by an incubator or VC)
+- Remove temp reverse geocode library (geocodes. only got nearest intersection) and replace with reverse geocode from Mapbox.
 
 
 ## Deployment TODO

@@ -13,9 +13,9 @@ import { default as FontAwesome5Icon } from 'react-native-vector-icons/FontAweso
 import rootStore from '../stores/root.store';
 import { Layout, useTheme, Text, Divider, Button } from '@ui-kitten/components';
 import { iconTypes, SYMPTOMS } from '../common/consts';
-import { useState } from 'react';
 import LottieView from 'lottie-react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import Map from '../components/maps/Map.component';
 
 const HeroScreen = observer(() => {
   const { emergencyStore } = rootStore;
@@ -27,13 +27,6 @@ const HeroScreen = observer(() => {
     getHeroes,
     nearestIntersection,
   } = emergencyStore;
-
-  const [mapRegion, setMapRegion] = useState({
-    longitude: 35.23445485387196,
-    latitude: 31.77697425929635,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
 
   const symptomsAreNotReported = () => {
     const symptomsArr: any = [];
@@ -61,10 +54,6 @@ const HeroScreen = observer(() => {
   );
 
   let heartAnimationRef: LottieView | null;
-
-  const onRegionChange = newRegion => {
-    setMapRegion(newRegion);
-  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -133,6 +122,7 @@ const HeroScreen = observer(() => {
                   {nearestIntersection?.intersection?.distance}
                 </Text>
               </Pressable> */}
+              <Map />
             </Layout>
 
             <Layout style={styles.action_buttons}>
@@ -212,13 +202,6 @@ const styles = StyleSheet.create({
   center_section: {
     height: '82%',
     width: '100%',
-  },
-  map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
   },
   action_buttons: {
     display: 'flex',
