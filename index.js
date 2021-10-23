@@ -2,9 +2,9 @@
  * @format
  */
 
-import {AppRegistry} from 'react-native';
+import { AppRegistry } from 'react-native';
 import App from './App';
-import {name as appName} from './app.json';
+import { name as appName } from './app.json';
 
 import PushNotification from 'react-native-push-notification';
 
@@ -17,8 +17,12 @@ PushNotification.configure({
       // Alert.alert(JSON.stringify(notification.message));
     }
     console.log('NOTIFICATION:', notification);
-    // notification.finish(PushNotificationIOS.FetchResult.NoData);
+    // notification.finish();
   },
+  onRegistrationError: function (err) {
+    console.error('error registring Push Notification', err.message, err);
+  },
+  senderID: '256040146856',
   permissions: {
     alert: true,
     badge: true,

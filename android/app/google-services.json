@@ -7,9 +7,38 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:256040146856:android:bcaecce080026128dbef9d",
+        "mobilesdk_app_id": "1:256040146856:android:4d07d4d2f8ec677ddbef9d",
         "android_client_info": {
           "package_name": "com.bystander"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "256040146856-s7itfils6sj6nbpl55d65rgg2h45vigq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyoooMZpmp76cBwiNQb1R7OfNvapmS_iw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "256040146856-s7itfils6sj6nbpl55d65rgg2h45vigq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256040146856:android:bcaecce080026128dbef9d",
+        "android_client_info": {
+          "package_name": "com.bystander.bystander"
         }
       },
       "oauth_client": [
