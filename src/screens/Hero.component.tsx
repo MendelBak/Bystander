@@ -25,7 +25,7 @@ const HeroScreen = observer(() => {
     getIsEmergency,
     getSymptoms,
     getHeroes,
-    nearestIntersection,
+    streetAddress,
   } = emergencyStore;
 
   const symptomsAreNotReported = () => {
@@ -114,12 +114,12 @@ const HeroScreen = observer(() => {
 
                 <Text style={{ fontSize: 15, color: 'white' }}>
                   Nearest Intersection:
-                  {nearestIntersection?.intersection?.street1} -
-                  {nearestIntersection?.intersection?.street2}
+                  {streetAddress?.intersection?.street1} -
+                  {streetAddress?.intersection?.street2}
                 </Text>
                 <Text>
                   Emergency Distance from Intersection:
-                  {nearestIntersection?.intersection?.distance}
+                  {streetAddress?.intersection?.distance}
                 </Text>
               </Pressable> */}
               <Map />

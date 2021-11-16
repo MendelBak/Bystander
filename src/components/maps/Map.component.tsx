@@ -4,10 +4,9 @@ import { observer } from 'mobx-react-lite';
 import { Layout } from '@ui-kitten/components';
 import { useEffect, useState } from 'react';
 import MapboxGL, { Logger } from '@react-native-mapbox-gl/maps';
+import { mapboxKey } from '../../common/keys';
 
-MapboxGL.setAccessToken(
-  'pk.eyJ1IjoibWVuZGVsYmFrIiwiYSI6ImNrdjBza3E4YTBhMncydW92eWFlMTNvcGYifQ.UpHPPYd3PhSJtiis7RFOHg',
-);
+MapboxGL.setAccessToken(mapboxKey);
 
 const Map = observer(() => {
   const [coordinates, setCoordinates] = useState([

@@ -11,12 +11,13 @@ import SymptomModel from '../models/symptom.model';
 import EmergencyModel from '../models/emergency.model';
 import { SYMPTOMS } from '../common/consts';
 import { URI } from '../../URI';
+import { mapboxKey } from '../common/keys';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();
   // private location: EmergencyLocationModel = new EmergencyLocationModel();
   // private symptoms: SymptomsModel = new SymptomsModel();
-  nearestIntersection: any = undefined;
+  streetAddress: any = undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -43,7 +44,7 @@ export default class EmergencyStore {
       .post(`${URI}/emergency/createEmergency`, this.emergency)
       .then(response => {
         this.setEmergency(response.data);
-        this.getNearestIntersection(position);
+        this.getStreetAddress(position);
       })
       .catch(error => {
         console.error('There was an error creating an emergency event!', error);
@@ -56,7 +57,7 @@ export default class EmergencyStore {
     }
 
     this.emergency.active = false;
-    this.nearestIntersection = undefined;
+    this.streetAddress = undefined;
 
     axios
       .put(`${URI}/emergency/endEmergency`, { id: this.emergency._id })
@@ -141,31 +142,30 @@ export default class EmergencyStore {
     return this.emergency.emergencyLocation;
   }
 
-  setNearestIntersection(intersectionData: any): void {
-    this.nearestIntersection = intersectionData;
+  setStreetAddress(intersectionData: any): void {
+    this.streetAddress = intersectionData;
   }
 
-  // HACK: This function is probably unecessary, since I'm using, literally, the exact same function in the backend, in order to use the intersection in the push notification header, so why make two identical API calls?.
+  // HACK: This function is probably unecessary, since I'm using, literally, the exact same function in the backend, in order to use the intersection in the push notification header, so why make two identical API calls?. Maybe I can pass through the address with the notification as data payload?
   // I'm keeping this API call here, for now, because the backend may change, also, it seems weird to get the data from the notification.
   // Worth looking into.
-  getNearestIntersection = (locationData: any) => {
+  getStreetAddress = (locationData: any) => {
     axios
       .get(
-        `http://api.geonames.org/findNearestIntersectionOSMJSON?lat=${locationData?.coords?.latitude}&lng=${locationData?.coords?.longitude}&username=bystanderAccount`,
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${locationData?.coords?.longitude},${locationData?.coords?.latitude}.json?types=country,address,postcode&access_token=${mapboxKey}`,
       )
       .then(response => {
-        this.setNearestIntersection(response.data);
+        this.setStreetAddress(
+          `${response?.data?.['features']?.[0]?.['address']} ${response?.data?.['features']?.[0]?.['text']}`,
+        );
       })
       .catch(error => {
-        console.error(
-          'There was an error finding the emergency intersection',
-          error,
-        );
+        console.error('There was an error performing reverse geocoding', error);
       });
   };
   //#endregion location
 
-  // TODO: Should probably be in its own, Symptoms, store.
+  // TODO: Should probably be in its own Symptoms store.
   //#region symptoms
   updateSymptom(symptom: SYMPTOMS): void {
     this.emergency.symptom[symptom] = !this.emergency.symptom[symptom];
