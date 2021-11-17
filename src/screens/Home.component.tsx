@@ -34,7 +34,6 @@ const HomeScreen = observer(
         // easing: Easing.bezier(0.785, 0.135, 0.15, 0.86),
         easing: Easing.bezier(0.785, 0.135, 0.15, 0.86),
         duration: 3000,
-
         useNativeDriver: true,
       }).start(({ finished }) => {
         emergencyStore.initializeEmergency();
@@ -89,34 +88,6 @@ const HomeScreen = observer(
             onLongPress={async () => {
               runAnimationAndBeginEmergency();
 
-              // emergencyStore.initializeEmergency().then(() => {
-              // TODO: I want to move this alert to trigger when I receive the push notification, which will prove the event made it to the DB.
-              // Need to figure out how to subscribe all relevant parties to this a particular emergency, to receive updates on it.
-              // Alert.alert(
-              //   'Your call for help has been sent!',
-              //   'Please call 911 while waiting for a Hero to respond',
-              //   [
-              //     {
-              //       text: 'Add Details',
-              //       onPress: () => (
-              //         navigation.navigate('Symptoms'), Vibration.vibrate(200)
-              //       ),
-              //       style: 'cancel',
-              //     },
-              //     {
-              //       text: 'Call 911',
-              //       onPress: () => (
-              //         // TODO: Add police phone number here. Localize for geographic location.
-              //         Linking.openURL('tel:000'), Vibration.vibrate(200)
-              //       ),
-              //       style: 'cancel',
-              //     },
-              //   ],
-              //   {
-              //     cancelable: true,
-              //   },
-              // );
-              // }),
               Vibration.vibrate(200);
             }}
             style={styles.alertButton}>

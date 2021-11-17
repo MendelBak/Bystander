@@ -40,8 +40,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'grey',
     backgroundColor: '#F0F0F3',
   },
 });

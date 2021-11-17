@@ -43,6 +43,7 @@ export default class EmergencyStore {
     axios
       .post(`${URI}/emergency/createEmergency`, this.emergency)
       .then(response => {
+        console.log(`//declareEmergency ~ response`, response);
         this.setEmergency(response.data);
         this.getStreetAddress(position);
       })

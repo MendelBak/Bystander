@@ -1,17 +1,62 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { Alert, PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { Layout } from '@ui-kitten/components';
 import { useEffect, useState } from 'react';
 import MapboxGL, { Logger } from '@react-native-mapbox-gl/maps';
 import { mapboxKey } from '../../common/keys';
+import rootStore from '../../stores/root.store';
+import Geolocation from 'react-native-geolocation-service';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 MapboxGL.setAccessToken(mapboxKey);
 
 const Map = observer(() => {
-  const [coordinates, setCoordinates] = useState([
-    35.23447631127978, 31.776887613261948,
+  const { emergencyStore } = rootStore;
+  const { getEmergencyLocation } = emergencyStore;
+  const [endCoordinates, setEndCoordinates] = useState([
+    getEmergencyLocation.longitude || 0,
+    getEmergencyLocation.latitude || 0,
   ]);
+  const [userCoordinates, setUserCoordinates] = useState<any>([0.0, 0.0]);
+
+  useEffect(() => {
+    updateCurrentUserLocation();
+  }, []);
+
+  const updateCurrentUserLocation = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+    }
+
+    Geolocation.getCurrentPosition(
+      (position: any) => {
+        setUserCoordinates([
+          position?.['coords']?.['longitude'],
+          // TODO Comment this out after testing
+          31.7732433,
+          // position?.['coords']?.['latitude'] ,
+        ]);
+      },
+      () => {
+        Alert.alert(`GPS Error`, `You must allow GPS tracking`);
+      },
+      {
+        accuracy: {
+          android: 'high',
+          ios: 'best',
+        },
+        enableHighAccuracy: true,
+        timeout: 15000,
+        distanceFilter: 0,
+        forceRequestLocation: true,
+        showLocationDialog: true,
+      },
+    );
+  };
+
   useEffect(() => {
     MapboxGL.setTelemetryEnabled(false);
   }, []);
@@ -36,13 +81,30 @@ const Map = observer(() => {
         styleURL={MapboxGL.StyleURL.Street}
         compassEnabled>
         <MapboxGL.Camera
-          zoomLevel={16}
+          bounds={{
+            ne: userCoordinates || [0.0, 0.0],
+            sw: endCoordinates || [0.0, 0.0],
+            paddingBottom: 50,
+            paddingLeft: 50,
+            paddingRight: 50,
+            paddingTop: 100,
+          }}
+          // zoomLevel={16}
           animationMode="flyTo"
-          followUserLocation
-          // followUserMode="course"
-          centerCoordinate={coordinates}
+          // followUserLocation
+          // centerCoordinate={userCoordinates}
         />
-        <MapboxGL.PointAnnotation coordinate={coordinates} id="Test" />
+        <MapboxGL.UserLocation showsUserHeadingIndicator />
+        <MapboxGL.PointAnnotation
+          coordinate={endCoordinates}
+          id="emergency_location">
+          <Icon color="red" name="location-pin" size={50} />
+        </MapboxGL.PointAnnotation>
+        <MapboxGL.PointAnnotation
+          coordinate={userCoordinates}
+          id="user_location">
+          <Icon color="blue" name="location-on" size={35} />
+        </MapboxGL.PointAnnotation>
       </MapboxGL.MapView>
     </Layout>
   );
