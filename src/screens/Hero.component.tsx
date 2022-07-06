@@ -144,7 +144,7 @@ const HeroScreen = observer(() => {
                   emergencyStore.addHero('123'),
                   Vibration.vibrate(200),
                   Linking.openURL(
-                    `https://www.google.com/maps/search/?api=1&query=${getEmergencyLocation.latitude}+${getEmergencyLocation.longitude}`,
+                    `https://www.google.com/maps/search/?api=1&query=${getEmergencyLocation.latitude},${getEmergencyLocation.longitude}`,
                   )
                 )}>
                 <Text>On My Way!</Text>
