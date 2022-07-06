@@ -10,7 +10,7 @@ import EmergencyLocationModel from '../models/emergencyLocation.model';
 import SymptomModel from '../models/symptom.model';
 import EmergencyModel from '../models/emergency.model';
 import { SYMPTOMS } from '../common/consts';
-import { URI } from '../../URI';
+import { URI } from '../common/URI';
 import { mapboxKey } from '../common/keys';
 
 export default class EmergencyStore {
@@ -24,8 +24,9 @@ export default class EmergencyStore {
   }
 
   // HACK: This is kinda weird. GetCurrentPosition is not returning asyncronously and this is a hack. So I need to start to declare the emergency with the location request, and then initiate creation of an emergency.
-  async initializeEmergency(): Promise<void> {
+  async initializeEmergency(): Promise<boolean> {
     await this.getCurrentPositionAndStartEmergency();
+    return true;
   }
 
   declareEmergency(position: any): void {
@@ -43,9 +44,8 @@ export default class EmergencyStore {
     axios
       .post(`${URI}/emergency/createEmergency`, this.emergency)
       .then(response => {
-        console.log(`//declareEmergency ~ response`, response);
         this.setEmergency(response.data);
-        this.getStreetAddress(position);
+        // this.getStreetAddress(position);
       })
       .catch(error => {
         console.error('There was an error creating an emergency event!', error);
@@ -150,20 +150,20 @@ export default class EmergencyStore {
   // HACK: This function is probably unecessary, since I'm using, literally, the exact same function in the backend, in order to use the intersection in the push notification header, so why make two identical API calls?. Maybe I can pass through the address with the notification as data payload?
   // I'm keeping this API call here, for now, because the backend may change, also, it seems weird to get the data from the notification.
   // Worth looking into.
-  getStreetAddress = (locationData: any) => {
-    axios
-      .get(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${locationData?.coords?.longitude},${locationData?.coords?.latitude}.json?types=country,address,postcode&access_token=${mapboxKey}`,
-      )
-      .then(response => {
-        this.setStreetAddress(
-          `${response?.data?.['features']?.[0]?.['address']} ${response?.data?.['features']?.[0]?.['text']}`,
-        );
-      })
-      .catch(error => {
-        console.error('There was an error performing reverse geocoding', error);
-      });
-  };
+  // getStreetAddress = (locationData: any) => {
+  //   axios
+  //     .get(
+  //       `https://api.mapbox.com/geocoding/v5/mapbox.places/${locationData?.coords?.longitude},${locationData?.coords?.latitude}.json?types=country,address,postcode&access_token=${mapboxKey}`,
+  //     )
+  //     .then(response => {
+  //       this.setStreetAddress(
+  //         `${response?.data?.['features']?.[0]?.['address']} ${response?.data?.['features']?.[0]?.['text']}`,
+  //       );
+  //     })
+  //     .catch(error => {
+  //       console.error('There was an error performing reverse geocoding', error);
+  //     });
+  // };
   //#endregion location
 
   // TODO: Should probably be in its own Symptoms store.
