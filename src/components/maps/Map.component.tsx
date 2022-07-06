@@ -36,8 +36,8 @@ const Map = observer(() => {
         setUserCoordinates([
           position?.['coords']?.['longitude'],
           // TODO Comment this out after testing
-          31.7732433,
-          // position?.['coords']?.['latitude'] ,
+          //   31.7732433,
+          position?.['coords']?.['latitude'],
         ]);
       },
       () => {
@@ -89,10 +89,9 @@ const Map = observer(() => {
             paddingRight: 50,
             paddingTop: 100,
           }}
-          // zoomLevel={16}
+          zoomLevel={16}
           animationMode="flyTo"
-          // followUserLocation
-          // centerCoordinate={userCoordinates}
+          followUserLocation
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
         <MapboxGL.PointAnnotation
