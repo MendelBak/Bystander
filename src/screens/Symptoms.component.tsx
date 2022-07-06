@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     height: '20%',
     width: '40%',
     borderRadius: 15,
-    borderWidth: 3,
+    borderWidth: 10,
     borderColor: '#FF4C00',
   },
   card_inner: {
