@@ -43,7 +43,7 @@ Navigate inside the `/Bystander` directory and open two terminal windows.
 - PRIORITY: Need to figure out how to prevent Push Notifications to users who opt out and how to persist that choice across app refresh or kill. Also, vibration is not working now (probably due to channels issue)
 - DONE Upgrade to v6 of React Navigation.
 - DONE Check all packages and upgrade if needed.
-- DONE Install UI Kitten. Design and create layout (including nav. hamburger menu + sliding sidebar menu?), theme, color palette, etc. 
+- DONE Install UI Kitten. Design and create layout (including nav. hamburger menu + sliding sidebar menu?), theme, color palette, etc.
 - DONE Comment out Details page.
 - In order to prevent Android from hibernating the app, when unused for long periods of time, make he app an active device admin app. (https://developer.android.com/training/monitoring-device-state/doze-standby#understand_app_standby)
 - Rewrite notifications service.
@@ -63,7 +63,7 @@ Navigate inside the `/Bystander` directory and open two terminal windows.
 ## Deployment TODO
 
 - Check TODO Tree for comments to self.
-- DONE - Need to open MongoDB, Google Developers COnsole, Authentication, etc, to all IPs, not just my local IP.
+- DONE - Need to open MongoDB, Google Developers Console, Authentication, etc, to all IPs, not just my local IP.
 - How to compile TS to JS for server, before deploying?
 - Set the GOOGLE_APPLICATION_CREDENTIALS environment variable for the backend firebase-admin API key. Don't store the key in the codebase.
 - Need to create an API key for backend requests (Authorization Headers/ JWT)
