@@ -1,17 +1,14 @@
-// External
 import { makeAutoObservable } from 'mobx';
 import Geolocation from 'react-native-geolocation-service';
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import axios from 'axios';
 import * as RootNavigation from '../../RootNavigation';
 
-// Internal
 import EmergencyLocationModel from '../models/emergencyLocation.model';
 import SymptomModel from '../models/symptom.model';
 import EmergencyModel from '../models/emergency.model';
 import { SYMPTOMS } from '../common/consts';
 import { URI } from '../common/URI';
-import { mapboxKey } from '../common/keys';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();
@@ -23,14 +20,49 @@ export default class EmergencyStore {
     makeAutoObservable(this);
   }
 
-  // HACK: This is kinda weird. GetCurrentPosition is not returning asyncronously and this is a hack. So I need to start to declare the emergency with the location request, and then initiate creation of an emergency.
-  async initializeEmergency(): Promise<boolean> {
-    await this.getCurrentPositionAndStartEmergency();
-    return true;
+  async declareEmergency(): Promise<boolean> {
+    try {
+      const currentPosition = await this.getCurrentPosition();
+      await this.createNewEmergency(currentPosition);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
-  declareEmergency(position: any): void {
-    //   declareEmergency(position: GeolocationPosition): void {
+  async getCurrentPosition(): Promise<Geolocation.GeoPosition> {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+    }
+
+    return new Promise<Geolocation.GeoPosition>((resolve, reject) => {
+      Geolocation.getCurrentPosition(
+        (position: Geolocation.GeoPosition) => {
+          resolve(position);
+        },
+        error => {
+          Alert.alert(`GPS Error`, `You must allow GPS tracking`);
+          RootNavigation.navigate('Home', { resetEmergencyAnimation: true });
+          reject(error);
+        },
+        {
+          accuracy: {
+            android: 'high',
+            ios: 'best',
+          },
+          enableHighAccuracy: true,
+          timeout: 15000,
+          distanceFilter: 0,
+          forceRequestLocation: true,
+          showLocationDialog: true,
+        },
+      );
+    });
+  }
+
+  async createNewEmergency(position: Geolocation.GeoPosition): Promise<void> {
     this.emergency = new EmergencyModel({
       active: true,
       heroOnScene: false,
@@ -41,30 +73,35 @@ export default class EmergencyStore {
       userId: '123',
     });
 
-    axios
-      .post(`${URI}/emergency/createEmergency`, this.emergency)
-      .then(response => {
-        this.setEmergency(response.data);
-        // this.getStreetAddress(position);
-      })
-      .catch(error => {
-        console.error('There was an error creating an emergency event!', error);
-      });
+    try {
+      const emergencyObj = await axios.post(
+        `${URI}/emergency/createEmergency`,
+        this.emergency,
+      );
+      this.setEmergency(emergencyObj.data);
+      return;
+    } catch (error) {
+      console.error('There was an error creating an emergency event!', error);
+      throw new Error();
+    }
   }
 
-  endEmergency(): void {
+  async endEmergency(): Promise<boolean> {
     if (!this.emergency.active) {
-      return;
+      return true;
     }
 
     this.emergency.active = false;
     this.streetAddress = undefined;
 
-    axios
+    await axios
       .put(`${URI}/emergency/endEmergency`, { id: this.emergency._id })
       .catch(error => {
         console.error('Error while ending an emergency event.', error);
+        return false;
       });
+
+    return true;
   }
 
   get getIsEmergency(): boolean {
@@ -78,7 +115,7 @@ export default class EmergencyStore {
         return response.data;
       })
       .catch(err => {
-        console.log('Error getting emergencies', err);
+        console.error('Error getting emergencies', err);
       });
   }
 
@@ -96,38 +133,6 @@ export default class EmergencyStore {
       1,
     );
     // TODO: Need to update the emergency with the newly modified rescuers (after rescuers collection/model is built on the backend).
-  }
-
-  //#region location
-  // This function does two things because the Geolocation.getCurrentPosition function is not returning its values asyncronously, so this is the best way I found to pass the data along, without having a race condition.
-  async getCurrentPositionAndStartEmergency(): Promise<void> {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-    }
-
-    Geolocation.getCurrentPosition(
-      (position: any) => {
-        //   (position: GeolocationPosition) => {
-        this.declareEmergency(position);
-      },
-      async () => {
-        Alert.alert(`GPS Error`, `You must allow GPS tracking`);
-        RootNavigation.navigate('Home', { resetEmergencyAnimation: true });
-      },
-      {
-        accuracy: {
-          android: 'high',
-          ios: 'best',
-        },
-        enableHighAccuracy: true,
-        timeout: 15000,
-        distanceFilter: 0,
-        forceRequestLocation: true,
-        showLocationDialog: true,
-      },
-    );
   }
 
   setEmergency(emergency: EmergencyModel): void {

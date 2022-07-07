@@ -1,4 +1,4 @@
-import {makeAutoObservable} from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import EmergencyStore from './emergency.store';
 import UserStore from './user.store';
 

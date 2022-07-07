@@ -10,7 +10,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'error',
     'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': 'error',
-    'no-restricted-syntax': ['error', 'SequenceExpression'],
+    'no-restricted-syntax': ['error'],
     'react/jsx-filename-extension': [
       1,
       {
