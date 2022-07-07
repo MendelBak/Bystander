@@ -11,8 +11,8 @@ import {
   Easing,
   SafeAreaView,
   View,
+  Alert,
 } from 'react-native';
-import { clockRunning } from 'react-native-reanimated';
 import rootStore from '../stores/root.store';
 
 const HomeScreen = observer(
@@ -20,7 +20,19 @@ const HomeScreen = observer(
     const { emergencyStore } = rootStore;
     const theme = useTheme();
 
-    const [showSuccessAlert, setShowSuccessAlert] = useState(true);
+    const buttonStatus = {
+      cancel: 'CANCEL',
+      getHelp: 'GET HELP',
+      pending: 'REQUESTING...',
+      cancelling: 'CANCELLING...',
+    };
+
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [emergencyButtonText, setEmergencyButtonText] = useState(
+      emergencyStore.getIsEmergency
+        ? buttonStatus.cancel
+        : buttonStatus.getHelp,
+    );
 
     const animationValue = useRef(new Animated.Value(0)).current;
     const scaleValue = useRef(0);
@@ -40,6 +52,7 @@ const HomeScreen = observer(
     );
 
     const runAnimationAndBeginEmergency = () => {
+      setEmergencyButtonText(buttonStatus.pending);
       scaleValue.current = scaleValue.current === 0 ? 1 : 0;
 
       Animated.timing(animationValue, {
@@ -47,16 +60,25 @@ const HomeScreen = observer(
         easing: Easing.bezier(0.785, 0.135, 0.15, 0.86),
         duration: 3000,
         useNativeDriver: true,
-      }).start(({ finished }) => {
-        emergencyStore.initializeEmergency().then(response => {
+      }).start(async ({ finished }) => {
+        try {
+          console.log('p1');
+          const response = await emergencyStore.initializeEmergency();
+          console.log(`this should be last ~ response`, response);
           if (response === true) {
             setShowSuccessAlert(true);
+          } else if (response === false) {
+            setEmergencyButtonText(buttonStatus.getHelp);
+            Alert.alert('There was an error with your emergency help request');
           }
-        });
+        } catch (error) {
+          Alert.alert('There was an error with your emergency help request');
+        }
       });
     };
 
-    const runResetAnimation = () => {
+    const runResetAnimation = async () => {
+      setEmergencyButtonText(buttonStatus.cancelling);
       scaleValue.current = scaleValue.current === 0 ? 1 : 0;
 
       Animated.timing(animationValue, {
@@ -64,9 +86,15 @@ const HomeScreen = observer(
         easing: Easing.inOut(Easing.elastic(0.1)),
         duration: 2000,
         useNativeDriver: true,
-      }).start(({ finished }) => {
+      }).start(async ({ finished }) => {
         if (emergencyStore.getIsEmergency) {
-          emergencyStore.endEmergency();
+          setEmergencyButtonText(buttonStatus.cancelling);
+          const response = await emergencyStore.endEmergency();
+          if (response === true) {
+            setEmergencyButtonText(buttonStatus.getHelp);
+          } else {
+            setEmergencyButtonText(buttonStatus.cancel);
+          }
         }
       });
     };
@@ -105,7 +133,7 @@ const HomeScreen = observer(
             style={styles.alertButton}>
             <Layout style={styles.alertButton}>
               <Text style={styles.alertButton__text}>
-                {emergencyStore.getIsEmergency ? 'CANCEL' : 'GET HELP'}
+                {emergencyButtonText}
               </Text>
             </Layout>
           </Pressable>
@@ -120,9 +148,7 @@ const HomeScreen = observer(
                   Your call for help was successful!
                 </Text>
                 <View style={styles.successAlertButtonView}>
-                  <Button
-                    // style={{ flex: 1 }}
-                    onPress={() => setShowSuccessAlert(false)}>
+                  <Button onPress={() => setShowSuccessAlert(false)}>
                     Close Menu
                   </Button>
                   <Button
