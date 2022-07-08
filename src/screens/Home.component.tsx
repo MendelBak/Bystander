@@ -1,6 +1,6 @@
 import { Button, Card, Layout, Modal, useTheme } from '@ui-kitten/components';
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   Pressable,
@@ -11,11 +11,14 @@ import {
   Alert,
 } from 'react-native';
 import rootStore from '../stores/root.store';
+import LottieView from 'lottie-react-native';
 
 const HomeScreen = observer(
   ({ route, navigation }: { route: any; navigation: any }, props) => {
     const { emergencyStore } = rootStore;
     const theme = useTheme();
+
+    let loadingAnimationRef: LottieView | null;
 
     const buttonStatus = {
       cancel: 'CANCEL EMERGENCY',
@@ -26,6 +29,7 @@ const HomeScreen = observer(
     };
 
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [showCancelAlert, setShowCancelAlert] = useState(false);
     const [emergencyButtonText, setEmergencyButtonText] = useState(
       emergencyStore.getIsEmergency
         ? buttonStatus.cancel
@@ -33,6 +37,7 @@ const HomeScreen = observer(
     );
 
     const beginEmergency = async () => {
+      loadingAnimationRef?.play();
       setEmergencyButtonText(buttonStatus.pending);
 
       try {
@@ -57,16 +62,107 @@ const HomeScreen = observer(
         const isEmergencyEnded = await emergencyStore.endEmergency();
         if (isEmergencyEnded === true) {
           setEmergencyButtonText(buttonStatus.getHelp);
+          setShowCancelAlert(true);
         } else {
           setEmergencyButtonText(buttonStatus.cancel);
         }
       }
     };
 
+    const successModal = () => {
+      return (
+        <View>
+          <Modal
+            visible={showSuccessAlert}
+            backdropStyle={styles.successAlertBackdrop}
+            onBackdropPress={() => setShowSuccessAlert(false)}>
+            <View
+              style={{
+                height: 140,
+                marginTop: -240,
+                marginBottom: 100,
+              }}>
+              <LottieView
+                source={require('../../assets/animations/message-sent.json')}
+                loop={false}
+                speed={0.5}
+                autoPlay
+              />
+            </View>
+            <Card disabled={true}>
+              <Text style={styles.successAlertMainText}>
+                Your call for help was successful!
+              </Text>
+              <View style={styles.successAlertButtonView}>
+                <Button onPress={() => setShowSuccessAlert(false)}>
+                  Close Menu
+                </Button>
+                <Button
+                  style={{
+                    backgroundColor: theme['color-success-500'],
+                    borderColor: 'white',
+                  }}
+                  onPress={() => {
+                    setShowSuccessAlert(false);
+                    navigation.navigate('Symptoms');
+                  }}>
+                  Add Information
+                </Button>
+              </View>
+            </Card>
+          </Modal>
+        </View>
+      );
+    };
+
+    const cancelModal = () => {
+      return (
+        <View>
+          <Modal
+            visible={showCancelAlert}
+            backdropStyle={styles.successAlertBackdrop}
+            onBackdropPress={() => setShowCancelAlert(false)}>
+            <View
+              style={{
+                height: 140,
+                marginTop: -240,
+                marginBottom: 100,
+              }}>
+              <LottieView
+                source={require('../../assets/animations/cancelled.json')}
+                loop={true}
+                speed={0.5}
+                autoPlay
+              />
+            </View>
+            <Card disabled={true}>
+              <Text style={styles.successAlertMainText}>
+                Your emergency has been cancelled
+              </Text>
+              <View style={styles.successCancelButtonView}>
+                <Button onPress={() => setShowCancelAlert(false)}>
+                  Close Menu
+                </Button>
+              </View>
+            </Card>
+          </Modal>
+        </View>
+      );
+    };
+
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <Layout style={styles.container}>
           <View style={styles.alertButtonGroup}>
+            <View style={styles.loadingWrapper}>
+              <LottieView
+                source={require('../../assets/animations/loading-spinner.json')}
+                loop={false}
+                ref={animation => {
+                  loadingAnimationRef = animation;
+                }}
+              />
+            </View>
             <Pressable
               disabled={emergencyStore.getIsEmergency}
               android_ripple={{
@@ -110,34 +206,8 @@ const HomeScreen = observer(
             </Pressable>
           </View>
 
-          <View>
-            <Modal
-              visible={showSuccessAlert}
-              backdropStyle={styles.successAlertBackdrop}
-              onBackdropPress={() => setShowSuccessAlert(false)}>
-              <Card disabled={true}>
-                <Text style={styles.successAlertMainText}>
-                  Your call for help was successful!
-                </Text>
-                <View style={styles.successAlertButtonView}>
-                  <Button onPress={() => setShowSuccessAlert(false)}>
-                    Close Menu
-                  </Button>
-                  <Button
-                    style={{
-                      backgroundColor: theme['color-success-500'],
-                      borderColor: 'white',
-                    }}
-                    onPress={() => {
-                      setShowSuccessAlert(false);
-                      navigation.navigate('Symptoms');
-                    }}>
-                    Add Information
-                  </Button>
-                </View>
-              </Card>
-            </Modal>
-          </View>
+          {successModal()}
+          {cancelModal()}
         </Layout>
       </SafeAreaView>
     );
@@ -187,7 +257,6 @@ const styles = StyleSheet.create({
   },
   successAlertMainText: {
     fontWeight: 'bold',
-    alignSelf: 'center',
     marginBottom: 10,
     fontSize: 20,
   },
@@ -197,6 +266,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   successAlertBackdrop: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'black',
+  },
+  loadingWrapper: {
+    width: 600,
+    position: 'absolute',
+    height: 600,
+    marginLeft: -187,
+    marginTop: -190,
+  },
+  successCancelButtonView: {
+    justifyContent: 'center',
   },
 });
