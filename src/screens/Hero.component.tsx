@@ -66,19 +66,22 @@ const HeroScreen = observer(() => {
                   <Icon
                     color={theme['color-primary-500']}
                     size={30}
-                    name={iconTypes.cardiacArrest.name}></Icon>
+                    name={iconTypes.cardiacArrest.name}
+                  />
                 ) : null}
                 {getSymptoms.bluntTrauma ? (
                   <FontAwesome5Icon
                     size={30}
                     color={theme['color-primary-500']}
-                    name={iconTypes.bluntTrauma.name}></FontAwesome5Icon>
+                    name={iconTypes.bluntTrauma.name}
+                  />
                 ) : null}
                 {getSymptoms.choking ? (
                   <FontistoIcon
                     color={theme['color-primary-500']}
                     size={30}
-                    name={iconTypes.choking.name}></FontistoIcon>
+                    name={iconTypes.choking.name}
+                  />
                 ) : null}
                 {getSymptoms.drowning ? (
                   <Icon
@@ -91,13 +94,15 @@ const HeroScreen = observer(() => {
                   <FontistoIcon
                     color={theme['color-primary-500']}
                     size={30}
-                    name={iconTypes.hemmoraging.name}></FontistoIcon>
+                    name={iconTypes.hemmoraging.name}
+                  />
                 ) : null}
                 {getSymptoms.other || symptomsAreNotReported() ? (
                   <Icon
                     color={theme['color-primary-500']}
                     size={30}
-                    name={iconTypes.other.name}></Icon>
+                    name={iconTypes.other.name}
+                  />
                 ) : null}
               </Layout>
             </Layout>
