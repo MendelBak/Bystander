@@ -1,14 +1,11 @@
-import { useFocusEffect } from '@react-navigation/native';
 import { Button, Card, Layout, Modal, useTheme } from '@ui-kitten/components';
 import { observer } from 'mobx-react-lite';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   Pressable,
   Vibration,
   StyleSheet,
-  Animated,
-  Easing,
   SafeAreaView,
   View,
   Alert,
@@ -21,10 +18,11 @@ const HomeScreen = observer(
     const theme = useTheme();
 
     const buttonStatus = {
-      cancel: 'CANCEL',
+      cancel: 'CANCEL EMERGENCY',
       getHelp: 'GET HELP',
       pending: 'REQUESTING...',
       cancelling: 'CANCELLING...',
+      inProgress: 'EMERGENCY IN PROGRESS',
     };
 
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -34,109 +32,83 @@ const HomeScreen = observer(
         : buttonStatus.getHelp,
     );
 
-    const animationValue = useRef(new Animated.Value(0)).current;
-    const scaleValue = useRef(0);
-
-    useFocusEffect(
-      React.useCallback(() => {
-        if (route?.params) {
-          const { resetEmergencyAnimation = false } = route.params;
-          if (resetEmergencyAnimation === true) animationValue.setValue(0);
-        }
-        if (!emergencyStore.getIsEmergency) {
-          animationValue.setValue(0);
-        }
-
-        return;
-      }, []),
-    );
-
-    const runAnimationAndBeginEmergency = () => {
+    const beginEmergency = async () => {
       setEmergencyButtonText(buttonStatus.pending);
-      scaleValue.current = scaleValue.current === 0 ? 1 : 0;
 
-      Animated.timing(animationValue, {
-        toValue: 2,
-        easing: Easing.bezier(0.785, 0.135, 0.15, 0.86),
-        duration: 3000,
-        useNativeDriver: true,
-      }).start(async ({ finished }) => {
-        try {
-          console.log('p1');
-          const response = await emergencyStore.initializeEmergency();
-          console.log(`this should be last ~ response`, response);
-          if (response === true) {
-            setShowSuccessAlert(true);
-          } else if (response === false) {
-            setEmergencyButtonText(buttonStatus.getHelp);
-            Alert.alert('There was an error with your emergency help request');
-          }
-        } catch (error) {
-          Alert.alert('There was an error with your emergency help request');
+      try {
+        const isEmergencyDeclared = await emergencyStore.declareEmergency();
+
+        if (isEmergencyDeclared) {
+          setEmergencyButtonText(buttonStatus.inProgress);
+          setShowSuccessAlert(true);
+        } else if (!isEmergencyDeclared) {
+          setEmergencyButtonText(buttonStatus.getHelp);
         }
-      });
+      } catch (error) {
+        Alert.alert('There was an error with your emergency help request');
+      }
     };
 
-    const runResetAnimation = async () => {
+    const endEmergency = async () => {
       setEmergencyButtonText(buttonStatus.cancelling);
-      scaleValue.current = scaleValue.current === 0 ? 1 : 0;
 
-      Animated.timing(animationValue, {
-        toValue: 0,
-        easing: Easing.inOut(Easing.elastic(0.1)),
-        duration: 2000,
-        useNativeDriver: true,
-      }).start(async ({ finished }) => {
-        if (emergencyStore.getIsEmergency) {
-          setEmergencyButtonText(buttonStatus.cancelling);
-          const response = await emergencyStore.endEmergency();
-          if (response === true) {
-            setEmergencyButtonText(buttonStatus.getHelp);
-          } else {
-            setEmergencyButtonText(buttonStatus.cancel);
-          }
+      if (emergencyStore.getIsEmergency) {
+        setEmergencyButtonText(buttonStatus.cancelling);
+        const isEmergencyEnded = await emergencyStore.endEmergency();
+        if (isEmergencyEnded === true) {
+          setEmergencyButtonText(buttonStatus.getHelp);
+        } else {
+          setEmergencyButtonText(buttonStatus.cancel);
         }
-      });
+      }
     };
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <Layout style={styles.container}>
-          <Animated.View
+          <View style={styles.alertButtonGroup}>
+            <Pressable
+              disabled={emergencyStore.getIsEmergency}
+              android_ripple={{
+                color: '#ff4C00',
+                borderless: true,
+              }}
+              onLongPress={() => {
+                emergencyStore.getIsEmergency ? null : beginEmergency();
+
+                Vibration.vibrate(200);
+              }}
+              style={styles.alertButton}>
+              <Layout style={styles.alertButton}>
+                <Text style={styles.alertButton__text}>
+                  {emergencyButtonText}
+                </Text>
+              </Layout>
+            </Pressable>
+          </View>
+          <View
             style={{
-              height: 200,
-              width: 200,
-              position: 'absolute',
-              backgroundColor: '#FF4C00',
-              borderRadius: 100,
-              transform: [
-                {
-                  scale: animationValue.interpolate({
-                    inputRange: [0, 3],
-                    outputRange: [1, 7],
-                  }),
-                },
-              ],
-            }}
-          />
-
-          <Pressable
-            onPress={() => {
-              runResetAnimation();
-            }}
-            android_ripple={{ color: '#ff4C00', borderless: true }}
-            onLongPress={async () => {
-              runAnimationAndBeginEmergency();
-
-              Vibration.vibrate(200);
-            }}
-            style={styles.alertButton}>
-            <Layout style={styles.alertButton}>
-              <Text style={styles.alertButton__text}>
-                {emergencyButtonText}
-              </Text>
-            </Layout>
-          </Pressable>
+              ...styles.cancelButtonGroup,
+              opacity: emergencyStore.getIsEmergency ? 1 : 0,
+            }}>
+            <Pressable
+              disabled={!emergencyStore.getIsEmergency}
+              onLongPress={() => {
+                emergencyStore.getIsEmergency ? endEmergency() : null;
+                Vibration.vibrate(200);
+              }}
+              android_ripple={{
+                color: 'crimson',
+                borderless: true,
+              }}
+              style={styles.cancelButton}>
+              <Layout style={styles.cancelButton}>
+                <Text style={styles.cancelButton__text}>
+                  {buttonStatus.cancel}
+                </Text>
+              </Layout>
+            </Pressable>
+          </View>
 
           <View>
             <Modal
@@ -157,8 +129,8 @@ const HomeScreen = observer(
                       borderColor: 'white',
                     }}
                     onPress={() => {
-                      setShowSuccessAlert(false),
-                        navigation.navigate('Symptoms');
+                      setShowSuccessAlert(false);
+                      navigation.navigate('Symptoms');
                     }}>
                     Add Information
                   </Button>
@@ -177,24 +149,41 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     width: '100%',
     backgroundColor: '#F0F0F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  alertButtonGroup: {
+    marginBottom: 100,
   },
   alertButton: {
     backgroundColor: '#F0F0F3',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    elevation: 5,
+    width: 220,
+    height: 220,
+    borderRadius: 120,
+    elevation: 50,
   },
   alertButton__text: {
     fontSize: 35,
     color: '#FF4C00',
     fontFamily: 'bebas',
+    textAlign: 'center',
+  },
+  cancelButtonGroup: {},
+  cancelButton: {
+    backgroundColor: '#F0F0F3',
+    padding: 10,
+    borderRadius: 20,
+    elevation: 25,
+  },
+  cancelButton__text: {
+    fontSize: 35,
+    color: 'darkred',
+    fontFamily: 'bebas',
+    textAlign: 'center',
   },
   successAlertMainText: {
     fontWeight: 'bold',
